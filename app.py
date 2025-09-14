@@ -76,6 +76,21 @@ def counter():
 </html>
 '''
 
+@app.route('/counter/clean')
+def clean_counter():
+    global count
+    count = 0
+
+    return '''
+<!doctype html>
+<html>
+    <body>
+        <h1>Счётчик очищен!</h1>
+        <p>Счётчик посещений обнулился((((</p>
+        <a href="''' + url_for('counter') + '''">Вернуться к счётчику</a>
+    </body>
+</html>
+'''
 
 @app.route("/info")
 def info():
