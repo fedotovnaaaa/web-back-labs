@@ -6,6 +6,46 @@ app = Flask(__name__)
 def not_found(err):
     return "нет такой страницы", 404
 
+@app.route("/")
+@app.route("/index")
+def index():
+    style = url_for("static", filename="lab1.css")
+
+    return '''
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="''' + style + '''">
+    <title>НГТУ, ФБ, Лабораторные работы</title>
+</head>
+
+<body>
+    <header>
+        НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных.
+    </header>
+
+    <main>
+        <h1>Лабораторные работы по WEB-программированию</h1>
+        
+        <div class="menu">
+            <ul>
+                <li>
+                    <a href="/lab1">Лабораторная работа 1</a>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        &copy; Федотова Юлия, ФБИ-31, 2 курс, 2025
+    </footer>
+</body>
+</html>
+'''
+
+
 @app.route("/lab1/web")
 def web():
     return '''<!doctype html>

@@ -14,3 +14,44 @@ h1 {
 img {
     height: 500px;
 }
+
+header {
+    background-color: rgb(226, 213, 162);
+    color: rgb(205, 158, 4);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 10px;
+    font-size: 14pt;
+}
+
+footer {
+    background-color: rgb(226, 213, 162);
+    color: rgb(205, 158, 4);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 10px;
+    text-align: right;
+    font-style: italic;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 100;
+}
+
+div.menu {
+    border: 3px solid rgb(225, 195, 97);
+    border-radius: 5px;
+    width: 300px;
+    margin: 0 auto;
+    transition: 0.3s;
+}
+div.menu:hover {
+    background-color: rgb(226, 213, 162);
+    box-shadow: 0 0 15px rgb(205, 158, 4);
+    transition: 0.3s;
+}
+
+a {
+    color: rgb(205, 158, 4);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-decoration: underline;
+}
