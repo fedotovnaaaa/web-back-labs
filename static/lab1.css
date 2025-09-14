@@ -51,7 +51,15 @@ div.menu:hover {
 }
 
 a {
-    color: rgb(205, 158, 4);
+    color: rgb(132, 101, 0);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-decoration: underline;
+}
+
+main {
+    color: rgb(205, 158, 4);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 10px 20px 45px;
+    padding: 10px;
+    transition: 0.3s;
 }
