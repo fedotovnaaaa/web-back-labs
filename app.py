@@ -3,8 +3,8 @@ import datetime
 app = Flask(__name__)
 
 @app.errorhandler(404)
-def not_found(err):
-    return "тю-тю... нет такой страницы...", 404
+def handle_404(error):
+    return not_found()
 
 @app.errorhandler(400)
 def handle_400(error):
@@ -105,6 +105,28 @@ def forbidden():
 </body>
 </html>
 ''', 403
+
+@app.route('/404')
+def not_found():
+    path = url_for("static", filename="error.jpg")
+    style = url_for("static", filename="lab1.css")
+
+    return '''
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="''' + style + '''">
+    <title>404 Not Found</title>
+</head>
+<body class="err">
+    <h1 class="err">404 Not Found</h1>
+    <p class="err">Страницы не существует</p>
+    <p class="err">Запрашиваемая страница или ресурс не найдены на сервере.</p>
+    <img src="''' + path + '''">
+</body>
+</html>
+''', 404
 
 @app.route('/405')
 def method_not_allowed():
