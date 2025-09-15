@@ -63,3 +63,18 @@ main {
     padding: 10px;
     transition: 0.3s;
 }
+
+body.err { 
+    font-family: Arial, sans-serif; 
+    text-align: center; 
+    padding: 50px; 
+    background-color: rgb(234, 233, 229);
+}
+h1.err { 
+    color: rgb(198, 174, 75); 
+    font-size: 48px; 
+}
+p.err { 
+    font-size: 18px; 
+    color: #555; 
+}
