@@ -111,9 +111,6 @@ def forbidden():
 </html>
 ''', 403
 
-from flask import request, url_for
-import datetime
-
 access_log = []
 
 @app.route('/404')
