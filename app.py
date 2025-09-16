@@ -1,5 +1,6 @@
 from flask import Flask, url_for, request, redirect
 import datetime
+
 app = Flask(__name__)
 
 @app.errorhandler(404)
@@ -25,6 +26,10 @@ def handle_405(error):
 @app.errorhandler(418)
 def handle_418(error):
     return teapot()
+
+@app.errorhandler(500)
+def handle_500(error):
+    return internal_server_error()
 
 @app.route('/400')
 def bad_request():
@@ -168,7 +173,31 @@ def teapot():
 </html>
 ''', 418
 
+@app.route('/500')
+def internal_server_error():
+    style = url_for("static", filename="lab1.css")
+    
+    return '''
+<!doctype html>
+<html lang="ru">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="''' + style + '''">
+    <title>500 - Ошибка сервера</title>
+</head>
+<body class="err">
+    <h1 class="err">500</h1>
+    <p class="err">Внутренняя ошибка сервера</p>
+    <p class="err">Произошла непредвиденная ошибка на сервере. Пожалуйста, попробуйте позже.</p>
+</body>
+</html>
+''', 500
 
+@app.route("/lab1/error")
+def cause_error():
+    result = 50 / 0
+    return "Этот код никогда не выполнится"
 
 @app.route("/")
 @app.route("/index")
