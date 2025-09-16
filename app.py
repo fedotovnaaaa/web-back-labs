@@ -111,24 +111,101 @@ def forbidden():
 </html>
 ''', 403
 
+from flask import request, url_for
+import datetime
+
+access_log = []
+
 @app.route('/404')
 def not_found():
+    # Логирование доступа
+    client_ip = request.remote_addr
+    access_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    requested_url = request.url
+    
+    log_entry = {
+        'ip': client_ip,
+        'date': access_date,
+        'url': requested_url
+    }
+    access_log.append(log_entry)
+    
+    # Генерация путей к статическим файлам
+    style = url_for("static", filename="error.css")
     path = url_for("static", filename="error.jpg")
-    style = url_for("static", filename="lab1.css")
-
+    
     return '''
 <!doctype html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="''' + style + '''">
     <title>404 Not Found</title>
 </head>
-<body class="err">
-    <h1 class="err">404 Not Found</h1>
-    <p class="err">Страницы не существует</p>
-    <p class="err">Запрашиваемая страница или ресурс не найдены на сервере.</p>
-    <img src="''' + path + '''">
+<body>
+    <div>
+        <div class="error-content">
+            <div class="error-header">
+                <h1>404</h1>
+                <h2>Страница не найдена</h2>
+            </div>
+            
+            <div class="error-image">
+                <img src="''' + path + '''" alt="404 Error">
+            </div>
+            
+            <div class="error-message">
+                <p>Запрашиваемая страница или ресурс не найдены на сервере.</p>
+                <p>Скоро фиксики все пофиксят, а пока немного подождите))</p>
+                <p>Можете пока вернуться на главную страницу.</p>
+            </div>
+            
+            <div class="error-info">
+                <div class="info-item">
+                    <strong>Ваш IP-адрес:</strong> ''' + client_ip + '''
+                </div>
+                <div class="info-item">
+                    <strong>Дата доступа:</strong> ''' + access_date + '''
+                </div>
+                <div class="info-item">
+                    <strong>Запрошенный URL:</strong> ''' + requested_url + '''
+                </div>
+            </div>
+            
+            <a href="/" class="home-button">Вернуться на главную страницу</a>
+        </div>
+        
+        <div class="log-section">
+            <h3>Журнал посещений</h3>
+            <p>История всех обращений к несуществующим страницам:</p>
+            
+            <div class="log-table-container">
+                <table class="log-table">
+                    <thead>
+                        <tr>
+                            <th>IP-адрес</th>
+                            <th>Дата и время</th>
+                            <th>Запрошенный URL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+''' + ''.join(f'''
+                        <tr>
+                            <td>{entry['ip']}</td>
+                            <td>{entry['date']}</td>
+                            <td>{entry['url']}</td>
+                        </tr>
+''' for entry in reversed(access_log)) + '''
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="log-footer">
+                <p>Всего записей в журнале: ''' + str(len(access_log)) + '''</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
 ''', 404

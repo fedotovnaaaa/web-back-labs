@@ -1,0 +1,149 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: rgb(226, 213, 162);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.error-content {
+    padding: 40px;
+    text-align: center;
+    background-color: #ff6b6b;
+    color: white;
+}
+
+.error-header h1 {
+    font-size: 120px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.error-header h2 {
+    font-size: 32px;
+    margin-bottom: 30px;
+    font-weight: 300;
+}
+
+.error-image img {
+    max-width: 300px;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    margin: 20px 0;
+}
+
+.error-message {
+    margin: 30px 0;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.error-message p {
+    margin-bottom: 10px;
+}
+
+.error-info {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 30px 0;
+    text-align: left;
+}
+
+.info-item {
+    margin-bottom: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.info-item strong {
+    color: #ffeaa7;
+}
+
+.home-button {
+    display: inline-block;
+    padding: 15px 40px;
+    background: #fff;
+    color: #ff6b6b;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.home-button:hover {
+    background: transparent;
+    color: white;
+    border-color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.log-section {
+    padding: 40px;
+    background: #f8f9fa;
+}
+
+.log-section h3 {
+    color: #2d3436;
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.log-section p {
+    color: #636e72;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.log-table-container {
+    overflow-x: auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.log-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.log-table th {
+    background:  rgb(226, 213, 162);
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.log-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid  rgb(226, 213, 162);
+    color: #2d3436;
+}
+
+.log-footer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.log-footer p {
+    color: #636e72;
+    font-size: 14px;
+    font-style: italic;
+}
