@@ -267,6 +267,29 @@ def lab_1():
             зовые возможности.
         </div>
         <p><a href="/">Вернуться на главную</a></p>
+
+        <h2>Список роутов</h2>
+        <ul>
+            <li><a href="/lab1">/lab1</a> - Ссылка на текущую страницу</li>
+            <li><a href="/">/</a> - Ссылка на главную страницу</li>
+            <li><a href="/index">/index</a> - Ссылка на главную страницу 2.0</li>
+            <li><a href="/lab1/web">/lab1/web</a> - Веб-сервер на Flask</li>
+            <li><a href="/lab1/author">/lab1/author</a> - Информация об авторе</li>
+            <li><a href="/lab1/image">/lab1/image</a> - Дуб</li>
+            <li><a href="/lab1/counter">/lab1/counter</a> - Счетчик посещений</li>
+            <li><a href="/lab1/counter/clean">/lab1/counter/clean</a> - Очистка счетчика</li>
+            <li><a href="/lab1/info">/lab1/info</a> - Перенаправление на автора</li>
+            <li><a href="/lab1/created">/lab1/created</a> - Страница создания чего-то... (201)</li>
+            <li><a href="/lab1/error">/lab1/error</a> - Вызов ошибки сервера (505)</li>
+            <li><a href="/400">/400</a> - Ошибка 400. Bad Request</li>
+            <li><a href="/401">/401</a> - Ошибка 401. Unauthorized</li>
+            <li><a href="/402">/402</a> - Ошибка 402. Payment Required</li>
+            <li><a href="/403">/403</a> - Ошибка 403. Forbidden</li>
+            <li><a href="/404">/404</a> - Ошибка 404. Not Found</li>
+            <li><a href="/405">/405</a> - Ошибка 405. Method Not Allowed</li>
+            <li><a href="/418">/418</a> - Ошибка 418. I'm a teapot</li>
+            <li><a href="/500">/500</a> - Ошибка 500. Ошибка сервера</li>
+        </ul>
     </main>
 
     <footer>
