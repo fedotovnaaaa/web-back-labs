@@ -311,7 +311,7 @@ def image():
     path = url_for("static", filename="oak.jpg")
     style = url_for("static", filename="lab1.css")
     
-    return '''
+    html_content = '''
 <!doctype html>
 <html>
     <head>
@@ -323,6 +323,12 @@ def image():
     </body>
 </html>
 '''
+    return html_content, 200, {
+        'Content-Language': 'ru-RU',  # Язык контента - русский
+        'X-Custom-Header': 'OAK TREE',  # Пользовательский заголовок 1
+        'X-Image-Type': 'Nature',  # Пользовательский заголовок 2
+        'X-Author-Name': 'Julka'  # Пользовательский заголовок 3
+    }
 
 
 count = 0
