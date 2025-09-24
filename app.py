@@ -354,7 +354,7 @@ def lab_1():
             <li><a href="/lab1/counter/clean">/lab1/counter/clean</a> - Очистка счетчика</li>
             <li><a href="/lab1/info">/lab1/info</a> - Перенаправление на автора</li>
             <li><a href="/lab1/created">/lab1/created</a> - Страница создания чего-то... (201)</li>
-            <li><a href="/lab1/error">/lab1/error</a> - Вызов ошибки сервера (505)</li>
+            <li><a href="/lab1/error">/lab1/error</a> - Вызов ошибки сервера (500)</li>
             <li><a href="/400">/400</a> - Ошибка 400. Bad Request</li>
             <li><a href="/401">/401</a> - Ошибка 401. Unauthorized</li>
             <li><a href="/402">/402</a> - Ошибка 402. Payment Required</li>
@@ -384,7 +384,7 @@ def web():
            </body>
         </html>''', 200, {
             'X-Server': 'sample',
-            'Content-Type': 'text/plain; charset=utf-8'
+            'Content-Type': 'text/plain; charset=utf-8' # браузер интерпретирует содержимое как обычный текст
         }
 
 @app.route("/lab1/author")
@@ -483,3 +483,11 @@ def created():
     </body>
 </html>
 ''', 201
+
+@app.route('/lab2/a')
+def a():
+    return 'без слэша'
+
+@app.route('/lab2/a/')
+def a2():
+    return 'со слэша'
