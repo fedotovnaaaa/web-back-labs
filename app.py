@@ -650,3 +650,26 @@ def lab2():
 def filters():
     phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
     return render_template('filter.html', phrase=phrase)
+
+# Перенаправление на /lab2/calc/1/1
+@app.route('/lab2/calc/')
+def calc_default():
+    return redirect(url_for('calc', a=1, b=1))
+
+# Перенаправление на /lab2/calc/a/1
+@app.route('/lab2/calc/<int:a>')
+def calc_single(a):
+    return redirect(url_for('calc', a=a, b=1))
+
+# Основной обработчик калькулятора
+@app.route('/lab2/calc/<int:a>/<int:b>')
+def calc(a, b):
+    
+    operations = {
+        'sum': a + b,
+        'diff': a - b,
+        'mult': a * b,
+        'div': a / b if b != 0 else 'деление на ноль',
+        'pow': a ** b
+    }
+    return render_template('calc.html', a=a, b=b, operations=operations)
