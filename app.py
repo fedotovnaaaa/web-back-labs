@@ -300,6 +300,8 @@ def index():
             <ul>
                 <li>
                     <a href="/lab1">Лабораторная работа 1</a>
+                </li>
+                <li>
                     <a href="/lab2">Лабораторная работа 2</a>
                 </li>
             </ul>
@@ -495,139 +497,65 @@ def a():
 def a2():
     return 'со слэша'
 
-flower_list = ['роза', 'тюльпан', 'пион', 'гипсофила', 'ромашка']
+flower_list = [
+    {'name': 'роза', 'price': 300},
+    {'name': 'тюльпан', 'price': 310},
+    {'name': 'пион', 'price': 320},
+    {'name': 'гипсофила', 'price': 330},
+    {'name': 'ромашка', 'price': 300}
+]
 
 @app.route('/lab2/flowers/<int:flower_id>')
-def flowers(flower_id):
-    style = url_for("static", filename="main.css")
-
+def flower_detail(flower_id):
     if flower_id >= len(flower_list):
         abort(404)
-    else:
-        return f'''
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{style}">
-</head>
-<body>
-    <header>
-        WEB-программирование, часть 2. Лабораторная работа 2
-    </header>
-
-    <main>
-        <div>{"Цветок: " + flower_list[flower_id]}<div>
-        <a href="/lab2/flowers">Посмотреть все цветы</a>
-    <main>
-
-    <footer>
-        &copy; Федотова Юлия, ФБИ-31, 3 курс, 2025
-    </footer>
-</body>
-</html>
-'''
+    
+    flower = flower_list[flower_id]
+    return render_template('flower_detail.html', 
+                         flower_name=flower['name'],
+                         flower_price=flower['price'],
+                         flower_id=flower_id,
+                         total_count=len(flower_list))
 
 @app.route('/lab2/add_flower/<name>')
 def add_flower(name):
-    flower_list.append(name)
-    return f'''
-<!doctype html>
-<html>
-    <body>
-        <h1>Добавлен новый цветок</h1>
-        <p>Добавлен цветок: {name} </p>
-        <p>Всего цветов: {len(flower_list)} </p>
-        <p>Полный список: {flower_list} </p>
-    </body>
-</html>
-'''
+    # Добавляем цветок с ценой по умолчанию
+    flower_list.append({'name': name, 'price': 300})
+    return render_template('flower_added.html', name=name, price=300, lab_num=2)
+
+@app.route('/lab2/add_flower_empty', methods=['GET'])
+def add_flower_empty():
+    name = request.args.get('name')
+    price = request.args.get('price')
+    
+    if name and price:
+        flower_list.append({'name': name, 'price': int(price)})
+        return render_template('flower_added.html', name=name, price=price, lab_num=2)
+    else:
+        return redirect(url_for('all_flowers'))
 
 @app.route('/lab2/flowers')
 def all_flowers():
-    style = url_for("static", filename="main.css")
-    return f'''
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{style}">
-</head>
-<body>
-    <header>
-        WEB-программирование, часть 2. Лабораторная работа 2
-    </header>
+    return render_template('flowers_list.html', 
+                         flower_list=flower_list, 
+                         total_count=len(flower_list))
 
-    <main>
-        <h1>Все цветы</h1>
-        <p>Общее количество цветов: {len(flower_list)}</p>
-        <h2>Список цветов:</h2>
-        <ul>
-            {''.join(f'<li>{flower}</li>' for flower in flower_list)}
-        </ul>
-    <main>
-
-    <footer>
-        &copy; Федотова Юлия, ФБИ-31, 3 курс, 2025
-    </footer>
-</body>
-</html>
-'''
-
-@app.route('/lab2/add_flower/')
-def not_add_flower():
-    style = url_for("static", filename="lab1.css")
+@app.route('/lab2/del_flower/<int:flower_id>')
+def del_flower(flower_id):
+    if flower_id >= len(flower_list):
+        abort(404)
     
-    return f'''
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{style}">
-    <title>Ошибка 400</title>
-</head>
-<body class="err">
-    <div class="err">
-        <h1 class="err">Ошибка 400 - Неверный запрос</h1>
-        <p class="err">Вы не задали имя цветка</p>
-    </div>
-</body>
-</html>
-''', 400
+    flower_list.pop(flower_id)
+    return redirect(url_for('all_flowers'))
 
 @app.route('/lab2/clear_flowers')
 def clear_flowers():
     flower_list.clear()
-    style = url_for("static", filename="main.css")
-    return f'''
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{style}">
-</head>
-<body>
-    <header>
-        WEB-программирование, часть 2. Лабораторная работа 2
-    </header>
+    return redirect(url_for('all_flowers'))
 
-    <main>
-        <h1>Список цветов очищен</h1>
-        <p>Все цветы были удалены из списка.</p>
-        <p>Текущее количество цветов: {len(flower_list)}</p>
-        <a href="/lab2/flowers">Посмотреть все цветы</a>
-    </main>
-
-    <footer>
-        &copy; Федотова Юлия, ФБИ-31, 3 курс, 2025
-    </footer>
-</body>
-</html>
-'''
+@app.route('/lab2/add_flower/')
+def not_add_flower():
+    return "Вы не задали имя цветка", 400
 
 @app.route('/lab2/example')
 def example():

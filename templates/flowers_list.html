@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список цветов</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <style>
+        main {
+            margin: 10px;
+        }
+        form {
+            margin-top: 20px;
+            background: #fff7dd;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgb(255, 238, 171);
+            width: 400px;
+        }
+        .danger {
+            background-color: #ffb20b;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .danger:hover {
+            background: #ff8000;
+        }
+        input, button {
+            padding: 8px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <b>WEB-программирование, часть 2. Лабораторная работа 2</b>
+    </header>
+    
+    <main>
+        <h1>Список цветов</h1>
+        <h2>Всего цветов: {{ total_count }}</h2>
+
+        <ul>
+            {% for flower in flower_list %}
+            <li>
+                {{ flower.name }} - {{ flower.price }} ₽
+                <a href="{{ url_for('del_flower', flower_id=loop.index0) }}">Удалить</a>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <form action="{{ url_for('add_flower_empty') }}" method="GET">
+            <input type="text" name="name" placeholder="Название цветка" required>
+            <input type="number" name="price" placeholder="Цена" required>
+            <button type="submit">Добавить цветок</button>
+        </form>
+
+        <br>
+        <a href="{{ url_for('clear_flowers') }}" class="danger">Удалить все цветы</a>
+        <br><br>
+        <nav>
+            <a class="btn" href="/">На главную</a>
+        </nav>
+    </main>
+    
+    <footer>
+        &copy; Федотова Юлия, ФБИ-31, 3 курс, 2025
+    </footer>
+</body>
+</html>

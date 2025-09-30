@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавление цветов</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+    <header>
+        <b>WEB-программирование, часть 2. {% if lab_num %}Лабораторная работа {{ lab_num }}{% endif %}</b>
+    </header>
+
+    <main>
+        <h1>Цветок добавлен!</h1>
+        <p><strong>Название:</strong> {{ name }}</p>
+        <p><strong>Цена:</strong> {{ price }} ₽</p>
+        <a href="{{ url_for('all_flowers') }}">К списку цветов</a>
+    </main>
+
+    <footer>
+        &copy; Федотова Юлия, ФБИ-31, 3 курс, 2025
+    </footer>
+</body>
+</html>
