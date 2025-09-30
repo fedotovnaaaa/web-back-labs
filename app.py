@@ -673,3 +673,21 @@ def calc(a, b):
         'pow': a ** b
     }
     return render_template('calc.html', a=a, b=b, operations=operations)
+
+@app.route('/lab2/books')
+def books():
+    books_list = [
+        {'author': 'Джоан Роулинг', 'title': 'Гарри Поттер и узник Азкабана', 'genre': 'Роман', 'pages': 528},
+        {'author': 'Мосян Тунсю', 'title': 'Благословение небожителей. Том 5', 'genre': 'Сянься', 'pages': 464},
+        {'author': 'Михаил Булгаков', 'title': 'Мастер и Маргарита', 'genre': 'Роман', 'pages': 480},
+        {'author': 'Александр Пушкин', 'title': 'Евгений Онегин', 'genre': 'Роман в стихах', 'pages': 240},
+        {'author': 'Мосян Тунсю', 'title': 'Благословение небожителей. Том 3', 'genre': 'Сянься', 'pages': 380},
+        {'author': 'Стивен Кинг', 'title': 'Зеленая миля', 'genre': 'Роман', 'pages': 448},
+        {'author': 'Кристина Старк', 'title': 'Крылья', 'genre': 'Роман', 'pages': 840},
+        {'author': 'Михаил Булгаков', 'title': 'Мастер и Маргарита', 'genre': 'Роман', 'pages': 480},
+        {'author': 'Маргарет Митчелл', 'title': 'Унесенные ветром', 'genre': 'Роман', 'pages': 1088},
+        {'author': 'Лев Толстой', 'title': 'Война и мир', 'genre': 'Роман-эпопея', 'pages': 1225},
+        {'author': 'Джейн Остен', 'title': 'Гордость и предубеждение', 'genre': 'Роман', 'pages': 350},
+        {'author': 'Дэниела Киза', 'title': 'Цветы для Элджернона', 'genre': 'Фантастика, психологическая драма', 'pages': 240}
+    ]
+    return render_template('books.html', books=books_list)

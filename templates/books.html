@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 2{% endblock %}
+
+{% block main %}
+<h1>Список книг</h1>
+<ul>
+    {% for book in books %}
+    <li>
+        <b>{{ book.author }}</b> <sup>{{ book.genre }}</sup>
+        - <i>«{{ book.title }}»</i>,
+        {{ book.pages }} стр.
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
