@@ -300,6 +300,7 @@ def index():
             <ul>
                 <li>
                     <a href="/lab1">Лабораторная работа 1</a>
+                    <a href="/lab2">Лабораторная работа 2</a>
                 </li>
             </ul>
         </div>
@@ -651,12 +652,10 @@ def filters():
     phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
     return render_template('filter.html', phrase=phrase)
 
-# Перенаправление на /lab2/calc/1/1
 @app.route('/lab2/calc/')
 def calc_default():
     return redirect(url_for('calc', a=1, b=1))
 
-# Перенаправление на /lab2/calc/a/1
 @app.route('/lab2/calc/<int:a>')
 def calc_single(a):
     return redirect(url_for('calc', a=a, b=1))
