@@ -691,3 +691,30 @@ def books():
         {'author': 'Дэниела Киза', 'title': 'Цветы для Элджернона', 'genre': 'Фантастика, психологическая драма', 'pages': 240}
     ]
     return render_template('books.html', books=books_list)
+
+@app.route('/lab2/iphone')
+def iphone_evolution():
+    iphone_list = [
+        {'title': 'iPhone (2007)', 'image': 'i-2007.png', 'description': 'Первый телефон компании Apple', 'year': 2007},
+        {'title': 'iPhone 3G', 'image': 'i-2008.jpg', 'description': 'Второй, почти такой же, телефон компании Apple', 'year': 2008},
+        {'title': 'iPhone 3GS', 'image': 'i-2009.jpg', 'description': 'Третий такой же кирпич', 'year': 2009},
+        {'title': 'iPhone 4', 'image': 'iphone-4.jpg', 'description': 'Уже что-то новенькое...', 'year': 2010},
+        {'title': 'iPhone 4S', 'image': 'iphone-4s.jpg', 'description': 'Снова идентичная новая модель', 'year': 2011},
+        {'title': 'iPhone 5', 'image': 'iphone-5.jpg', 'description': 'Пошел тяжелый люкс...', 'year': 2012},
+        {'title': 'iPhone 5S и iPhone 5C', 'image': 'iphone-5SC.jpg', 'description': 'Впервые сделали сканер отпечатка пальцев, камеру со Slow-motion и многое другое', 'year': 2013},
+        {'title': 'iPhone 6/6 Plus', 'image': 'iphone-6.jpg', 'description': 'iPhone 6 получил более скругленные края, а также, впервые, поддержку NFC', 'year': 2014},
+        {'title': 'iPhone 6S/6S Plus', 'image': 'iphone-6s.jpg', 'description': '«Ускоренные» версии появились для обеих «шестерок»', 'year': 2015},
+        {'title': 'iPhone 7/7 Plus', 'image': 'iphone-7.webp', 'description': 'Критики начали обвинять Apple в отсутствии инноваций', 'year': 2016},
+        {'title': 'iPhone SE', 'image': 'iphone-se.webp', 'description': 'Большая диагональ нравилась не всем, поэтому в Apple попытались повторить успех iPhone 6 и представили iPhone SE', 'year': 2016},
+        {'title': 'iPhone 8/8 Plus', 'image': 'iphone-8.jpg', 'description': '«Восьмерка» стала одним из самых слабых продуктов от Apple', 'year': 2017},
+        {'title': 'iPhone X', 'image': 'iphone-x.jpg', 'description': 'Начало поколения «бескнопочных» iPhone', 'year': 2017},
+        {'title': 'iPhone Xs/Xs Max/ Xr', 'image': 'iphone-xs.jpg', 'description': 'Наибольшей популярностью стал пользоваться iPhone Xr, который благодаря диагонали экрана стал «золотой серединой»', 'year': 2018},
+        {'title': 'iPhone 11/11 Pro/11 Pro Max', 'image': 'iphone-11.jpg', 'description': 'АФИГЕТЬ АЙФОН 11 БЫЛ ВЫПУЩЕН В 2019 ГОДУ', 'year': 2019},
+        {'title': 'iPhone 12/12 Pro/12 Pro Max/12 Mini, iPhone SE 2 Gen', 'image': 'iphone-12.webp', 'description': 'Слишком много айфонов за раз', 'year': 2020},
+        {'title': 'iPhone 13/13 Pro/13 Pro Max/13 Mini', 'image': 'iphone-13.jpg', 'description': 'У меня, кстати, 13 айфон. Мой первый и последний, пока что, айфон))', 'year': 2021},
+        {'title': 'iPhone 14/14 Pro/14 Pro Max/14 Plus', 'image': 'iphone-14.jpg', 'description': 'Ну остальные уже одинаковые пошли', 'year': 2022},
+        {'title': 'iPhone 15, iPhone 15 Plus, iPhone 15 Pro и iPhone 15 Pro Max', 'image': 'iphone-15.jpg', 'description': 'Ну, я же говорю, одинаковые...', 'year': 2023},
+        {'title': 'iPhone 16, iPhone 16 Plus, iPhone 16 Pro и iPhone 16 Pro Max', 'image': 'iphone-16.png', 'description': 'ноу комментс...', 'year': 2024},
+        {'title': 'iPhone 17, iPhone 17 Air, iPhone 17 Pro и iPhone 17 Pro Max', 'image': 'iphone-17.jpg', 'description': 'Конец!', 'year': 2025},
+    ]
+    return render_template('iphone.html', iphones=iphone_list)

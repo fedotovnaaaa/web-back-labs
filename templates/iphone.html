@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 2{% endblock %}
+
+{% block main %}
+<h1>Все модели Apple iPhone</h1>
+<div>
+    {% for iphone in iphones %}
+    <div>
+        <img src="{{ url_for('static', filename='iphones/' + iphone.image) }}" height="300">
+        <h3>{{ iphone.title }}</h3>
+        <p>Год: {{ iphone.year }}</p>
+        <p>{{ iphone.description }}</p><br>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
