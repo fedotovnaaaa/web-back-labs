@@ -484,6 +484,8 @@ def created():
 </html>
 ''', 201
 
+# lab-2
+
 @app.route('/lab2/a')
 def a():
     return 'без слэша'
@@ -496,10 +498,35 @@ flower_list = ['роза', 'тюльпан', 'пион', 'гипсофила', '
 
 @app.route('/lab2/flowers/<int:flower_id>')
 def flowers(flower_id):
+    style = url_for("static", filename="main.css")
+
     if flower_id >= len(flower_list):
         abort(404)
     else:
-        return "Цветок: " + flower_list[flower_id]
+        return f'''
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{style}">
+</head>
+<body>
+    <header>
+        WEB-программирование, часть 2. Лабораторная работа 2
+    </header>
+
+    <main>
+        <div>{"Цветок: " + flower_list[flower_id]}<div>
+        <a href="/lab2/flowers">Посмотреть все цветы</a>
+    <main>
+
+    <footer>
+        &copy; Федотова Юлия, ФБИ-31, 3 курс, 2025
+    </footer>
+</body>
+</html>
+'''
 
 @app.route('/lab2/add_flower/<name>')
 def add_flower(name):
@@ -515,6 +542,92 @@ def add_flower(name):
     </body>
 </html>
 '''
+
+@app.route('/lab2/flowers')
+def all_flowers():
+    style = url_for("static", filename="main.css")
+    return f'''
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{style}">
+</head>
+<body>
+    <header>
+        WEB-программирование, часть 2. Лабораторная работа 2
+    </header>
+
+    <main>
+        <h1>Все цветы</h1>
+        <p>Общее количество цветов: {len(flower_list)}</p>
+        <h2>Список цветов:</h2>
+        <ul>
+            {''.join(f'<li>{flower}</li>' for flower in flower_list)}
+        </ul>
+    <main>
+
+    <footer>
+        &copy; Федотова Юлия, ФБИ-31, 3 курс, 2025
+    </footer>
+</body>
+</html>
+'''
+
+@app.route('/lab2/add_flower/')
+def not_add_flower():
+    style = url_for("static", filename="lab1.css")
+    
+    return f'''
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{style}">
+    <title>Ошибка 400</title>
+</head>
+<body class="err">
+    <div class="err">
+        <h1 class="err">Ошибка 400 - Неверный запрос</h1>
+        <p class="err">Вы не задали имя цветка</p>
+    </div>
+</body>
+</html>
+''', 400
+
+@app.route('/lab2/clear_flowers')
+def clear_flowers():
+    flower_list.clear()
+    style = url_for("static", filename="main.css")
+    return f'''
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{style}">
+</head>
+<body>
+    <header>
+        WEB-программирование, часть 2. Лабораторная работа 2
+    </header>
+
+    <main>
+        <h1>Список цветов очищен</h1>
+        <p>Все цветы были удалены из списка.</p>
+        <p>Текущее количество цветов: {len(flower_list)}</p>
+        <a href="/lab2/flowers">Посмотреть все цветы</a>
+    </main>
+
+    <footer>
+        &copy; Федотова Юлия, ФБИ-31, 3 курс, 2025
+    </footer>
+</body>
+</html>
+'''
+
 @app.route('/lab2/example')
 def example():
     name, lab_number, group, kurs = 'Fedotova Julka', 2, 'ФБИ-31', '3 курс'
@@ -532,3 +645,8 @@ def example():
 @app.route('/lab2/')
 def lab2():
     return render_template('lab2.html')
+
+@app.route('/lab2/filters')
+def filters():
+    phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
+    return render_template('filter.html', phrase=phrase)
