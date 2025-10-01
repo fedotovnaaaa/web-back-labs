@@ -4,10 +4,12 @@
 
 {% block main %}
     <h1>Формы cookie</h1>
+    <div>
+        Hello, <span style="color: {{name_color}}">{{ name }}</span>!
+    </div>
     <div>Список сделанных страниц:</div>
     <ol>
-        <li>
-            <a href="/lab3/cookie">Печеньки</a>
-        </li>
+        <li><a href="/lab3/cookie">Печеньки</a></li>
+        <li><a href="/lab3/del_cookie">Удаление печенек</a></li>
     </ol>
 {% endblock %}
