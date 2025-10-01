@@ -3,6 +3,157 @@ import datetime
 lab1 = Blueprint('lab1', __name__)
 
 
+@lab1.errorhandler(400)
+def handle_400(error):
+    return bad_request()
+
+
+@lab1.errorhandler(401)
+def handle_401(error):
+    return unauthorized()
+
+
+@lab1.errorhandler(403)
+def handle_403(error):
+    return forbidden()
+
+
+@lab1.errorhandler(405)
+def handle_405(error):
+    return method_not_allowed()
+
+
+@lab1.errorhandler(418)
+def handle_418(error):
+    return teapot()
+
+
+@lab1.route('/400')
+def bad_request():
+    style = url_for("static", filename="lab1.css")
+
+    return '''
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="''' + style + '''">
+    <title>400 Bad Request</title>
+</head>
+<body class="err">
+    <h1 class="err">400 Bad Request</h1>
+    <p class="err">Сервер не может обработать запрос из-за некорректного синтаксиса.</p>
+    <p class="err">Пожалуйста, проверьте правильность вашего запроса.</p>
+</body>
+</html>
+''', 400
+
+
+@lab1.route('/401')
+def unauthorized():
+    style = url_for("static", filename="lab1.css")
+
+    return '''
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="''' + style + '''">
+    <title>401 Unauthorized</title>
+</head>
+<body class="err">
+    <h1 class="err">401 Unauthorized</h1>
+    <p class="err">Требуется аутентификация для доступа к данному ресурсу.</p>
+    <p class="err">Пожалуйста, предоставьте корректные учетные данные.</p>
+</body>
+</html>
+''', 401
+
+
+@lab1.route('/402')
+def payment_required():
+    style = url_for("static", filename="lab1.css")
+
+    return '''
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="''' + style + '''">
+    <title>402 Payment Required</title>
+</head>
+<body class="err">
+    <h1 class="err">402 Payment Required</h1>
+    <p class="err">Для доступа к данному ресурсу требуется оплата.</p>
+    <p class="err">Этот код зарезервирован для будущего использования.</p>
+</body>
+</html>
+''', 402
+
+
+@lab1.route('/403')
+def forbidden():
+    style = url_for("static", filename="lab1.css")
+
+    return '''
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="''' + style + '''">
+    <title>403 Forbidden</title>
+</head>
+<body class="err">
+    <h1 class="err">403 Forbidden</h1>
+    <p class="err">Доступ к запрошенному ресурсу запрещен.</p>
+    <p class="err">У вас нет необходимых прав для просмотра этой страницы.</p>
+</body>
+</html>
+''', 403
+
+
+@lab1.route('/405')
+def method_not_allowed():
+    style = url_for("static", filename="lab1.css")
+
+    return '''
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="''' + style + '''">
+    <title>405 Method Not Allowed</title>
+</head>
+<body class="err">
+    <h1 class="err">405 Method Not Allowed</h1>
+    <p class="err">Метод запроса не поддерживается для данного ресурса.</p>
+    <p class="err">Пожалуйста, используйте допустимый HTTP-метод.</p>
+</body>
+</html>
+''', 405
+
+
+@lab1.route('/418')
+def teapot():
+    style = url_for("static", filename="lab1.css")
+
+    return '''
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="''' + style + '''">
+    <title>418 I'm a teapot</title>
+</head>
+<body class="err">
+    <h1 class="err">418 I'm a teapot</h1>
+    <p class="err">Я - чайник и не могу заваривать кофе.</p>
+    <p class="err">Это шуточный код ошибки из RFC 2324 (Hyper Text Coffee Pot Control Protocol).</p>
+</body>
+</html>
+''', 418
+
+
 @lab1.route("/lab1/error")
 def cause_error():
     result = 50 / 0
@@ -10,7 +161,7 @@ def cause_error():
 
 
 @lab1.route("/lab1")
-def lab():
+def lab_1():
     style = url_for("static", filename="lab1.css")
 
     return '''
