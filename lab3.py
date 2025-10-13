@@ -28,9 +28,21 @@ def del_cookie():
 
 
 @lab3.route('/lab3/form1')
-def  form1():
+def form1():
+    errors = {}  # Объединяем все ошибки в один словарь
     user = request.args.get('user')
     age = request.args.get('age')
     sex = request.args.get('sex')
-    return render_template('lab3/form1.html', user=user, age=age, sex=sex)
+    
+    # Проверка имени
+    if user == '':
+        errors['user'] = 'Заполните поле!'
+    
+    # Проверка возраста
+    if age == '':
+        errors['age'] = 'Заполните поле!'
+    
+    return render_template('lab3/form1.html', 
+                         user=user, age=age, sex=sex, 
+                         errors=errors)  # Передаем один словарь с ошибками
 
