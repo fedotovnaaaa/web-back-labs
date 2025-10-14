@@ -289,3 +289,91 @@ def settings_clear():
     resp.set_cookie('line_height', '', expires=0)
     resp.set_cookie('text_decoration', '', expires=0)
     return resp
+
+
+# Список товаров (например, смартфоны)
+PRODUCTS = [
+    {'name': 'iPhone 15', 'price': 89990, 'brand': 'Apple', 'color': 'черный', 'storage': '128GB'},
+    {'name': 'Samsung Galaxy S24', 'price': 79990, 'brand': 'Samsung', 'color': 'белый', 'storage': '256GB'},
+    {'name': 'Xiaomi Redmi Note 13', 'price': 24990, 'brand': 'Xiaomi', 'color': 'синий', 'storage': '128GB'},
+    {'name': 'Google Pixel 8', 'price': 69990, 'brand': 'Google', 'color': 'серый', 'storage': '128GB'},
+    {'name': 'OnePlus 12', 'price': 64990, 'brand': 'OnePlus', 'color': 'зеленый', 'storage': '256GB'},
+    {'name': 'iPhone 14', 'price': 69990, 'brand': 'Apple', 'color': 'красный', 'storage': '128GB'},
+    {'name': 'Samsung Galaxy A54', 'price': 34990, 'brand': 'Samsung', 'color': 'фиолетовый', 'storage': '128GB'},
+    {'name': 'Xiaomi 13T', 'price': 45990, 'brand': 'Xiaomi', 'color': 'черный', 'storage': '256GB'},
+    {'name': 'Realme 11 Pro', 'price': 29990, 'brand': 'Realme', 'color': 'золотой', 'storage': '128GB'},
+    {'name': 'Nothing Phone 2', 'price': 54990, 'brand': 'Nothing', 'color': 'белый', 'storage': '256GB'},
+    {'name': 'iPhone 13', 'price': 59990, 'brand': 'Apple', 'color': 'розовый', 'storage': '128GB'},
+    {'name': 'Samsung Galaxy Z Flip5', 'price': 99990, 'brand': 'Samsung', 'color': 'фиолетовый', 'storage': '256GB'},
+    {'name': 'Xiaomi Poco X6', 'price': 21990, 'brand': 'Xiaomi', 'color': 'желтый', 'storage': '128GB'},
+    {'name': 'Google Pixel 7a', 'price': 44990, 'brand': 'Google', 'color': 'голубой', 'storage': '128GB'},
+    {'name': 'OnePlus Nord 3', 'price': 39990, 'brand': 'OnePlus', 'color': 'серый', 'storage': '256GB'},
+    {'name': 'iPhone SE', 'price': 44990, 'brand': 'Apple', 'color': 'белый', 'storage': '64GB'},
+    {'name': 'Samsung Galaxy M54', 'price': 27990, 'brand': 'Samsung', 'color': 'синий', 'storage': '128GB'},
+    {'name': 'Xiaomi Redmi 12', 'price': 15990, 'brand': 'Xiaomi', 'color': 'черный', 'storage': '64GB'},
+    {'name': 'Realme GT Neo5', 'price': 49990, 'brand': 'Realme', 'color': 'красный', 'storage': '256GB'},
+    {'name': 'Nothing Phone 1', 'price': 34990, 'brand': 'Nothing', 'color': 'черный', 'storage': '128GB'}
+]
+
+@lab3.route('/lab3/products')
+def products():
+    # Вычисляем минимальную и максимальную цены из всех товаров
+    all_prices = [product['price'] for product in PRODUCTS]
+    min_price_all = min(all_prices)
+    max_price_all = max(all_prices)
+    
+    # Получаем цены из cookies или из формы
+    min_price_cookie = request.cookies.get('min_price')
+    max_price_cookie = request.cookies.get('max_price')
+    
+    min_price_form = request.args.get('min_price')
+    max_price_form = request.args.get('max_price')
+    
+    # Определяем минимальную и максимальную цены для поиска
+    min_price = min_price_form if min_price_form is not None else min_price_cookie
+    max_price = max_price_form if max_price_form is not None else max_price_cookie
+    
+    # Преобразуем в числа, если не пустые
+    min_price = int(min_price) if min_price and min_price.isdigit() else None
+    max_price = int(max_price) if max_price and max_price.isdigit() else None
+    
+    # Если пользователь перепутал мин и макс - меняем местами
+    if min_price and max_price and min_price > max_price:
+        min_price, max_price = max_price, min_price
+    
+    # Фильтруем товары
+    filtered_products = PRODUCTS
+    
+    if min_price is not None:
+        filtered_products = [p for p in filtered_products if p['price'] >= min_price]
+    
+    if max_price is not None:
+        filtered_products = [p for p in filtered_products if p['price'] <= max_price]
+    
+    # Создаем ответ
+    resp = make_response(render_template('lab3/products.html',
+                                       products=filtered_products,
+                                       min_price=min_price,
+                                       max_price=max_price,
+                                       min_price_all=min_price_all,
+                                       max_price_all=max_price_all,
+                                       total_found=len(filtered_products),
+                                       total_products=len(PRODUCTS)))
+    
+    # Сохраняем в cookies, если значения из формы
+    if min_price_form is not None:
+        resp.set_cookie('min_price', str(min_price) if min_price else '')
+    if max_price_form is not None:
+        resp.set_cookie('max_price', str(max_price) if max_price else '')
+    
+    return resp
+
+
+@lab3.route('/lab3/products_clear')
+def products_clear():
+    resp = make_response(redirect('/lab3/products'))
+    # Очищаем cookies с ценами
+    resp.set_cookie('min_price', '', expires=0)
+    resp.set_cookie('max_price', '', expires=0)
+    return resp
+
