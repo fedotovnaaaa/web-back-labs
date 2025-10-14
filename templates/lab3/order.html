@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+    <h1>Заказ напитка</h1>
+
+    <form action="/lab3/pay">
+        <div class="drink-section">
+            <h2>Напитки:</h2>
+            <label class="drink-option">
+                <input type="radio" value="coffee" name="drink" checked>
+                <span class="drink-name">Кофе</span>
+                <span class="price">120 руб.</span>
+            </label>
+            <label class="drink-option">
+                <input type="radio" value="black-tea" name="drink">
+                <span class="drink-name">Черный чай</span>
+                <span class="price">80 руб.</span>
+            </label>
+            <label class="drink-option">
+                <input type="radio" value="green-tea" name="drink">
+                <span class="drink-name">Зеленый чай</span>
+                <span class="price">70 руб.</span>
+            </label>
+        </div>
+
+        <div class="additives-section">
+            <h2>Добавки:</h2>
+            <label class="additive-option">
+                <input type="checkbox" name="milk">
+                <span class="additive-name">Молоко</span>
+                <span class="price">+30 руб.</span>
+            </label>
+            <label class="additive-option">
+                <input type="checkbox" name="sugar">
+                <span class="additive-name">Сахар</span>
+                <span class="price">+10 руб.</span>
+            </label>
+        </div>
+        
+        <div class="order-button">
+            <button type="submit" class="button">Заказать</button>
+        </div>
+    </form>
+
+    <style>
+        .drink-section, .additives-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 5px;
+        }
+
+        .drink-option, .additive-option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .drink-option:hover, .additive-option:hover {
+            background-color: #e8f5e8;
+        }
+
+        .drink-option input, .additive-option input {
+            margin-right: 10px;
+        }
+
+        .drink-name, .additive-name {
+            flex-grow: 1;
+            font-weight: bold;
+        }
+
+        .price {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .order-button {
+            text-align: center;
+            margin-top: 10px;
+            padding-bottom: 40px;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+{% endblock %}

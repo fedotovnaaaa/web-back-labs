@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+    <h1>Оплата заказа</h1>
+
+    <div class="price-summary">
+        <h2>Сумма к оплате: <span class="total-price">{{ price }} рублей</span></h2>
+    </div>
+
+    <form action="/lab3/success" class="payment-form">
+        <div class="form-group">
+            <label>Номер банковской карты:</label>
+            <input type="text" name="card" pattern="\d{16}" value="{{ card or '' }}">
+        </div>
+
+        <div class="form-group">
+            <label>Имя держателя карты:</label>
+            <input type="text" name="name" value="{{ name or '' }}">
+        </div>
+
+        <div class="form-group">
+            <label>Номер CVV:</label>
+            <input type="text" name="cvv" size="3" pattern="\d{3}" value="{{ cvv or '' }}">
+        </div>
+        
+        <div class="payment-buttons">
+            <button type="submit" class="button pay-button">Оплатить {{ price }} рублей</button>
+            <a href="/lab3/order" class="button cancel-button">Отменить заказ</a>
+        </div>
+    </form>
+
+    <style>
+        .price-summary {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .total-price {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .payment-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .payment-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            
+        }
+
+        .pay-button {
+            background-color: #4CAF50;
+            color: aliceblue;
+            padding: 10px;
+        }
+
+        .pay-button:hover {
+            color: aliceblue;
+            background-color: #45a049;
+        }
+
+        .cancel-button {
+            color: aliceblue;
+            background-color: #f44336;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .cancel-button:hover {
+            background-color: #da190b;
+        }
+    </style>
+{% endblock %}
