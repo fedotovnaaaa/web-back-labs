@@ -315,6 +315,7 @@ PRODUCTS = [
     {'name': 'Nothing Phone 1', 'price': 34990, 'brand': 'Nothing', 'color': 'черный', 'storage': '128GB'}
 ]
 
+
 @lab3.route('/lab3/products')
 def products():
     # Вычисляем минимальную и максимальную цены из всех товаров
