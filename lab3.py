@@ -134,6 +134,7 @@ def settings():
     
     return resp
 
+
 @lab3.route('/lab3/ticket')
 def ticket():
     # Получаем данные из формы
@@ -277,3 +278,14 @@ def ticket_result():
                          date=date, insurance=insurance, ticket_type=ticket_type,
                          total_price=total_price)
 
+
+@lab3.route('/lab3/settings_clear')
+def settings_clear():
+    resp = make_response(redirect('/lab3/settings'))
+    # Очищаем все cookies стилей
+    resp.set_cookie('color', '', expires=0)
+    resp.set_cookie('backgroundcolor', '', expires=0)
+    resp.set_cookie('font_size', '', expires=0)
+    resp.set_cookie('line_height', '', expires=0)
+    resp.set_cookie('text_decoration', '', expires=0)
+    return resp
