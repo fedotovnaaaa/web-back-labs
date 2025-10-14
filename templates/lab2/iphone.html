@@ -7,7 +7,7 @@
 <div>
     {% for iphone in iphones %}
     <div>
-        <img src="{{ url_for('static', filename='iphones/' + iphone.image) }}" height="300">
+        <img src="{{ url_for('static', filename='lab2/' + iphone.image) }}" height="300">
         <h3>{{ iphone.title }}</h3>
         <p>Год: {{ iphone.year }}</p>
         <p>{{ iphone.description }}</p><br>

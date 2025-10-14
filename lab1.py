@@ -30,7 +30,7 @@ def handle_418(error):
 
 @lab1.route('/400')
 def bad_request():
-    style = url_for("static", filename="lab1.css")
+    style = url_for("static", filename="/lab1/lab1.css")
 
     return '''
 <!doctype html>
@@ -51,7 +51,7 @@ def bad_request():
 
 @lab1.route('/401')
 def unauthorized():
-    style = url_for("static", filename="lab1.css")
+    style = url_for("static", filename="/lab1/lab1.css")
 
     return '''
 <!doctype html>
@@ -72,7 +72,7 @@ def unauthorized():
 
 @lab1.route('/402')
 def payment_required():
-    style = url_for("static", filename="lab1.css")
+    style = url_for("static", filename="/lab1/lab1.css")
 
     return '''
 <!doctype html>
@@ -93,7 +93,7 @@ def payment_required():
 
 @lab1.route('/403')
 def forbidden():
-    style = url_for("static", filename="lab1.css")
+    style = url_for("static", filename="/lab1/lab1.css")
 
     return '''
 <!doctype html>
@@ -114,7 +114,7 @@ def forbidden():
 
 @lab1.route('/405')
 def method_not_allowed():
-    style = url_for("static", filename="lab1.css")
+    style = url_for("static", filename="/lab1/lab1.css")
 
     return '''
 <!doctype html>
@@ -135,7 +135,7 @@ def method_not_allowed():
 
 @lab1.route('/418')
 def teapot():
-    style = url_for("static", filename="lab1.css")
+    style = url_for("static", filename="/lab1/lab1.css")
 
     return '''
 <!doctype html>
@@ -162,7 +162,7 @@ def cause_error():
 
 @lab1.route("/lab1")
 def lab_1():
-    style = url_for("static", filename="lab1.css")
+    style = url_for("static", filename="/lab1/lab1.css")
 
     return '''
 <!doctype html>
@@ -255,8 +255,8 @@ def author():
 
 @lab1.route("/lab1/image")
 def image():
-    path = url_for("static", filename="oak.jpg")
-    style = url_for("static", filename="lab1.css")
+    path = url_for("static", filename="/lab1/oak.jpg")
+    style = url_for("static", filename="/lab1/lab1.css")
     
     html_content = '''
 <!doctype html>

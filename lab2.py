@@ -27,7 +27,7 @@ def flower_detail(flower_id):
         abort(404)
     
     flower = flower_list[flower_id]
-    return render_template('flower_detail.html', 
+    return render_template('/lab2/flower_detail.html', 
                          flower_name=flower['name'],
                          flower_price=flower['price'],
                          flower_id=flower_id,
@@ -38,7 +38,7 @@ def flower_detail(flower_id):
 def add_flower(name):
     # Добавляем цветок с ценой по умолчанию
     flower_list.append({'name': name, 'price': 300})
-    return render_template('flower_added.html', name=name, price=300, lab_num=2)
+    return render_template('/lab2/flower_added.html', name=name, price=300, lab_num=2)
 
 
 @lab2.route('/lab2/add_flower_empty', methods=['GET'])
@@ -48,14 +48,14 @@ def add_flower_empty():
     
     if name and price:
         flower_list.append({'name': name, 'price': int(price)})
-        return render_template('flower_added.html', name=name, price=price, lab_num=2)
+        return render_template('/lab2/flower_added.html', name=name, price=price, lab_num=2)
     else:
         return redirect(url_for('lab2.all_flowers'))
 
 
 @lab2.route('/lab2/flowers')
 def all_flowers():
-    return render_template('flowers_list.html', 
+    return render_template('/lab2/flowers_list.html', 
                          flower_list=flower_list, 
                          total_count=len(flower_list))
 
@@ -90,20 +90,20 @@ def example():
         {'name': 'манго', 'price': 250},
         {'name': 'нектарины', 'price': 90},
     ]
-    return render_template('example.html', 
+    return render_template('/lab2/example.html', 
                            name=name, lab_number=lab_number, group=group, 
                            kurs=kurs, fruits=fruits)
 
 
 @lab2.route('/lab2/')
 def lab_2():
-    return render_template('lab2.html')
+    return render_template('/lab2/lab2.html')
 
 
 @lab2.route('/lab2/filters')
 def filters():
     phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
-    return render_template('filter.html', phrase=phrase)
+    return render_template('/lab2/filter.html', phrase=phrase)
 
 
 @lab2.route('/lab2/calc/')
@@ -127,7 +127,7 @@ def calc(a, b):
         'div': a / b if b != 0 else 'деление на ноль',
         'pow': a ** b
     }
-    return render_template('calc.html', a=a, b=b, operations=operations)
+    return render_template('/lab2/calc.html', a=a, b=b, operations=operations)
 
 
 @lab2.route('/lab2/books')
@@ -146,7 +146,7 @@ def books():
         {'author': 'Джейн Остен', 'title': 'Гордость и предубеждение', 'genre': 'Роман', 'pages': 350},
         {'author': 'Дэниела Киза', 'title': 'Цветы для Элджернона', 'genre': 'Фантастика, психологическая драма', 'pages': 240}
     ]
-    return render_template('books.html', books=books_list)
+    return render_template('/lab2/books.html', books=books_list)
 
 
 @lab2.route('/lab2/iphone')
@@ -174,4 +174,4 @@ def iphone_evolution():
         {'title': 'iPhone 16, iPhone 16 Plus, iPhone 16 Pro и iPhone 16 Pro Max', 'image': 'iphone-16.png', 'description': 'ноу комментс...', 'year': 2024},
         {'title': 'iPhone 17, iPhone 17 Air, iPhone 17 Pro и iPhone 17 Pro Max', 'image': 'iphone-17.jpg', 'description': 'Конец!', 'year': 2025},
     ]
-    return render_template('iphone.html', iphones=iphone_list)
+    return render_template('/lab2/iphone.html', iphones=iphone_list)

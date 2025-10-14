@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request, redirect, abort, render_template 
+from flask import Flask, url_for, request
 import datetime
 from lab1 import lab1
 from lab2 import lab2
@@ -38,8 +38,8 @@ def not_found():
     access_log.append(log_entry)
     
     # Генерация путей к статическим файлам
-    style = url_for("static", filename="error.css")
-    path = url_for("static", filename="error.jpg")
+    style = url_for("static", filename="/lab1/error.css")
+    path = url_for("static", filename="/lab1/error.jpg")
     
     return '''
 <!doctype html>
@@ -120,7 +120,7 @@ def not_found():
 
 @app.route('/500')
 def internal_server_error():
-    style = url_for("static", filename="lab1.css")
+    style = url_for("static", filename="/lab1/lab1.css")
     
     return '''
 <!doctype html>
@@ -143,7 +143,7 @@ def internal_server_error():
 @app.route("/")
 @app.route("/index")
 def index():
-    style = url_for("static", filename="lab1.css")
+    style = url_for("static", filename="/lab1/lab1.css")
 
     return '''
 <!doctype html>
