@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+    <h1>Железнодорожный билет</h1>
+
+    <form>
+        <div>
+            <label>ФИО пассажира:</label>
+            <input type="text" name="fio" value="{{ fio or '' }}">
+            <span class="error">{{ errors.fio if errors else '' }}</span>
+        </div>
+
+        <div>
+            <label>Полка:</label>
+            <select name="shelf">
+                <option value="lower" {{ 'selected' if shelf == 'lower' }}>Нижняя</option>
+                <option value="upper" {{ 'selected' if shelf == 'upper' }}>Верхняя</option>
+                <option value="upper-side" {{ 'selected' if shelf == 'upper-side' }}>Верхняя боковая</option>
+                <option value="lower-side" {{ 'selected' if shelf == 'lower-side' }}>Нижняя боковая</option>
+            </select>
+            <span class="error">{{ errors.shelf if errors else '' }}</span>
+        </div>
+
+        <div>
+            <label>Бельё:</label>
+            <select name="linen">
+                <option value="yes" {{ 'selected' if linen == 'yes' }}>Да</option>
+                <option value="no" {{ 'selected' if linen == 'no' or not linen }}>Нет</option>
+            </select>
+            <span class="error">{{ errors.linen if errors else '' }}</span>
+        </div>
+
+        <div>
+            <label>Багаж:</label>
+            <select name="baggage">
+                <option value="yes" {{ 'selected' if baggage == 'yes' }}>Да</option>
+                <option value="no" {{ 'selected' if baggage == 'no' or not baggage }}>Нет</option>
+            </select>
+            <span class="error">{{ errors.baggage if errors else '' }}</span>
+        </div>
+
+        <div>
+            <label>Возраст:</label>
+            <input type="number" name="age" min="1" max="120" value="{{ age or '' }}">
+            <span class="error">{{ errors.age if errors else '' }}</span>
+        </div>
+
+        <div>
+            <label>Пункт выезда:</label>
+            <input type="text" name="departure" value="{{ departure or '' }}">
+            <span class="error">{{ errors.departure if errors else '' }}</span>
+        </div>
+
+        <div>
+            <label>Пункт назначения:</label>
+            <input type="text" name="destination" value="{{ destination or '' }}">
+            <span class="error">{{ errors.destination if errors else '' }}</span>
+        </div>
+
+        <div>
+            <label>Дата поездки:</label>
+            <input type="date" name="date" value="{{ date or '' }}">
+            <span class="error">{{ errors.date if errors else '' }}</span>
+        </div>
+
+        <div>
+            <label>Страховка:</label>
+            <select name="insurance">
+                <option value="yes" {{ 'selected' if insurance == 'yes' }}>Да</option>
+                <option value="no" {{ 'selected' if insurance == 'no' or not insurance }}>Нет</option>
+            </select>
+            <span class="error">{{ errors.insurance if errors else '' }}</span>
+        </div>
+
+        <div>
+            <button type="submit">Оформить билет</button>
+        </div>
+    </form>
+
+    <style>
+        form div {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+        
+        input, select {
+            padding: 8px;
+            width: 200px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .error {
+            color: red;
+            margin-left: 10px;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+    <div>
+        <a href="/lab3/ticket">Оформить новый билет</a>
+    </div>
+
+    <h1>Железнодорожный билет</h1>
+    
+    <div class="ticket">
+        <div class="ticket-header">
+            <h2>Железнодорожный билет</h2>
+            <div class="ticket-type">{{ ticket_type }}</div>
+        </div>
+        
+        <div class="ticket-info">
+            <div><strong>Пассажир:</strong> {{ fio }}</div>
+            <div><strong>Возраст:</strong> {{ age }} лет</div>
+            <div><strong>Маршрут:</strong> {{ departure }} → {{ destination }}</div>
+            <div><strong>Дата поездки:</strong> {{ date }}</div>
+            <div><strong>Полка:</strong> 
+                {% if shelf == 'lower' %}Нижняя
+                {% elif shelf == 'upper' %}Верхняя
+                {% elif shelf == 'upper-side' %}Верхняя боковая
+                {% elif shelf == 'lower-side' %}Нижняя боковая
+                {% endif %}
+            </div>
+            <div><strong>Бельё:</strong> {{ 'Да' if linen == 'yes' else 'Нет' }}</div>
+            <div><strong>Багаж:</strong> {{ 'Да' if baggage == 'yes' else 'Нет' }}</div>
+            <div><strong>Страховка:</strong> {{ 'Да' if insurance == 'yes' else 'Нет' }}</div>
+        </div>
+        
+        <div class="ticket-price">
+            <h3>Стоимость: {{ total_price }} рублей</h3>
+        </div>
+    </div>
+
+    <style>
+        .ticket {
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 20px auto;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+        
+        .ticket-header {
+            text-align: center;
+            border-bottom: 2px dashed #333;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .ticket-type {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #007bff;
+            margin-top: 10px;
+        }
+        
+        .ticket-info div {
+            margin-bottom: 10px;
+            padding: 5px 0;
+        }
+        
+        .ticket-price {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px dashed #333;
+            font-size: 1.3em;
+            color: #28a745;
+        }
+        
+        a {
+            display:grid;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        
+        a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}
