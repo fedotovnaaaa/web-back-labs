@@ -1,10 +1,10 @@
 body {
-    background-color: rgb(241, 241, 241);
-    margin: 0;    
+    /* background-color: rgb(241, 241, 241); */
+    margin: 0;
 }
 
 main {
-    color: rgb(157, 109, 27);
+    /* color: rgb(157, 109, 27); */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 10px;
     padding: 10px;
@@ -37,4 +37,9 @@ a {
 }
 a:hover {
     text-decoration: underline;
+}
+
+.error{
+    color: red;
+    background-color: antiquewhite;
 }

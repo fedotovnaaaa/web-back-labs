@@ -91,3 +91,44 @@ def success():
 
     return render_template('lab3/success.html', price=price)
 
+
+@lab3.route('/lab3/settings')
+def settings():
+    color = request.args.get('color')
+    backgroundcolor = request.args.get('backgroundcolor')
+    font_size = request.args.get('font_size')
+    line_height = request.args.get('line_height')
+    text_decoration = request.args.get('text_decoration')
+
+    resp = make_response(redirect('/lab3/settings'))
+    
+    if color:
+        resp.set_cookie('color', color)
+    
+    if backgroundcolor:
+        resp.set_cookie('backgroundcolor', backgroundcolor)
+    
+    if font_size:
+        resp.set_cookie('font_size', font_size)
+    
+    if line_height:
+        resp.set_cookie('line_height', line_height)
+    
+    if text_decoration:
+        resp.set_cookie('text_decoration', text_decoration)
+    
+    # Если нет новых значений, просто рендерим страницу
+    if not color and not backgroundcolor and not font_size and not line_height and not text_decoration:
+        color = request.cookies.get('color')
+        backgroundcolor = request.cookies.get('backgroundcolor')
+        font_size = request.cookies.get('font_size')
+        line_height = request.cookies.get('line_height')
+        text_decoration = request.cookies.get('text_decoration')
+        resp = make_response(render_template('lab3/settings.html', 
+                                           color=color, 
+                                           backgroundcolor=backgroundcolor,
+                                           font_size=font_size,
+                                           line_height=line_height,
+                                           text_decoration=text_decoration))
+    
+    return resp

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+    <h1>Настройки стилей</h1>
+    <form>
+        <div>
+            <label for="color">Цвет текста: </label>
+            <input type="color" name="color" id="color" value="{{ color or '' }}">
+        </div>
+
+        <div>
+            <label for="backgroundcolor">Цвет фона: </label>
+            <input type="color" name="backgroundcolor" id="backgroundcolor" value="{{ backgroundcolor or '' }}">
+        </div>
+
+        <div>
+            <label for="font_size">Размер шрифта (px): </label>
+            <input type="number" name="font_size" id="font_size" min="8" max="72" 
+                   value="{{ font_size or '' }}">
+        </div>
+
+        <div>
+            <label for="line_height">Межстрочный интервал: </label>
+            <select name="line_height" id="line_height">
+                <option value="1" {% if line_height == '1' %}selected{% endif %}>1</option>
+                <option value="1.2" {% if line_height == '1.2' %}selected{% endif %}>1.2</option>
+                <option value="1.5" {% if line_height == '1.5' or not line_height %}selected{% endif %}>1.5</option>
+                <option value="2" {% if line_height == '2' %}selected{% endif %}>2</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="text_decoration">Оформление текста: </label>
+            <select name="text_decoration" id="text_decoration">
+                <option value="none" {% if text_decoration == 'none' or not text_decoration %}selected{% endif %}>Обычный</option>
+                <option value="underline" {% if text_decoration == 'underline' %}selected{% endif %}>Подчеркнутый</option>
+                <option value="overline" {% if text_decoration == 'overline' %}selected{% endif %}>Надчеркнутый</option>
+                <option value="line-through" {% if text_decoration == 'line-through' %}selected{% endif %}>Перечеркнутый</option>
+            </select>
+        </div>
+        
+        <div>
+            <button type="submit">Применить стили</button>
+        </div>
+    </form>
+{% endblock %}
