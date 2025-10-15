@@ -291,7 +291,6 @@ def settings_clear():
     return resp
 
 
-# Список товаров (например, смартфоны)
 PRODUCTS = [
     {'name': 'iPhone 15', 'price': 89990, 'brand': 'Apple', 'color': 'черный', 'storage': '128GB'},
     {'name': 'Samsung Galaxy S24', 'price': 79990, 'brand': 'Samsung', 'color': 'белый', 'storage': '256GB'},
