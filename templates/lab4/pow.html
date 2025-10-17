@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block lab %}Возведение в степень{% endblock %}
+
+{% block main %}
+    {% if error %}
+        <div style="color: red;">
+            <p><strong>Ошибка:</strong> {{ error }}</p>
+        </div>
+        <p><a href="/lab4/pow-form">Вернуться к форме</a></p>
+    {% else %}
+        <h1>Возведение в степень</h1>
+        <p>{{ x1 }} ^ {{ x2 }} = {{ result }}</p>
+        <p><a href="/lab4/pow-form">Вернуться к форме</a></p>
+    {% endif %}
+{% endblock %}

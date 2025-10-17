@@ -4,14 +4,16 @@
 
 {% block main %}
     {% if error %}
-        <p>{{ error }}</p>
+        <div style="color: red;">
+            <p><strong>Ошибка:</strong> {{ error }}</p>
+        </div>
         <p><a href="/lab4/div-form">Вернуться к форме</a></p>
     {% elif error_null %}
-        <p>{{ error_null }}</p>
+        <p style="color: red;"><strong>Ошибка:</strong> {{ error_null }}</p>
         <p><a href="/lab4/div-form">Вернуться к форме</a></p>
     {% else %}
         <h1>Деление чисел</h1>
         <p>{{ x1 }} / {{ x2 }} = {{ result }}</p>
         <p><a href="/lab4/div-form">Вернуться к форме</a></p>
-        {% endif %}
+    {% endif %}
 {% endblock %}
