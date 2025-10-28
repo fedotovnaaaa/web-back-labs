@@ -1,17 +1,17 @@
 body {
-    /* background-color: rgb(241, 241, 241); */
+    background-color: rgb(255, 250, 233);
     margin: 0;
 }
 
 main {
-    /* color: rgb(157, 109, 27); */
+    color: rgb(25, 171, 200);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 10px;
     padding: 10px;
 }
 
 header {
-    background-color: rgb(174, 174, 174);
+    background-color: rgb(47, 108, 121);
     color: rgb(255, 220, 159);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 15px;
@@ -20,7 +20,7 @@ header {
 }
 
 footer {
-    background-color: rgb(174, 174, 174);
+    background-color: rgb(47, 108, 121);
     color: rgb(255, 220, 159);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 10px;
@@ -30,13 +30,32 @@ footer {
     bottom: 0;
     right: 0;
     left: 0;
+    z-index: 100;
 }
 a {
     color: #ffb20b;
     text-decoration: none;
+    transition: 1s 0.3s;
+}
+a:link {
+    color: rgb(35, 132, 124);
+    text-decoration: none;
+}
+
+a:visited {
+    color: rgb(35, 132, 124);
+    text-decoration: none;
 }
 a:hover {
+    color: rgb(35, 132, 124);
+    background-color: rgba(129, 157, 213, 0.415);
+    text-shadow: rgba(35, 132, 124, 0.796);
     text-decoration: underline;
+    transition: 0.3s;
+}
+a:active {
+    color: rgb(27, 80, 105);
+    opacity: 0.3;
 }
 
 .error{
