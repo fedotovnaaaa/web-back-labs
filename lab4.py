@@ -131,10 +131,10 @@ def tree():
 
 
 users = [
-    {'login': 'alex', 'password': '111'},
-    {'login': 'bob', 'password': '222'},
-    {'login': 'ann', 'password': '333'},
-    {'login': 'kate', 'password': '444'},
+    {'login': 'alex', 'password': '111', 'name': 'Алексей Петров', 'gender': 'мужской'},
+    {'login': 'bob', 'password': '222', 'name': 'Вася Пупкин', 'gender': 'мужской'},
+    {'login': 'ann', 'password': '333', 'name': 'Анна Иоановна', 'gender': 'женский'},
+    {'login': 'kate', 'password': '444', 'name': 'Екатерина Петровна', 'gender': 'женский'},
 ]
 
 
@@ -144,24 +144,46 @@ def login():
         if 'login' in session:
             authorized = True
             login = session['login']
+            # Находим имя пользователя по логину
+            user_name = ''
+            for user in users:
+                if user['login'] == login:
+                    user_name = user['name']
+                    break
+            return render_template('lab4/login.html', authorized=authorized, login=login, name=user_name)
         else:
             authorized = False
             login = ''
-        return render_template('lab4/login.html', authorized=authorized, login=login)
+            return render_template('lab4/login.html', authorized=authorized, login=login)
     
     login = request.form.get('login')
     password = request.form.get('password')
-
+    
+    # Проверка на пустые значения
+    errors = []
+    if not login:
+        errors.append('не введён логин')
+    if not password:
+        errors.append('не введён пароль')
+    
+    # Если есть ошибки валидации
+    if errors:
+        return render_template('lab4/login.html', errors=errors, login_value=login, authorized=False)
+    
+    # Проверка логина и пароля
     for user in users:
         if login == user['login'] and password == user['password']:
             session['login'] = login
+            session['name'] = user['name']  # Сохраняем имя в сессии
             return redirect('/lab4/login')
 
+    # Если логин/пароль неверные
     error = 'Неверные логин и/или пароль'
-    return render_template('lab4/login.html', error=error, authorized=False)
+    return render_template('lab4/login.html', error=error, login_value=login, authorized=False)
 
 
 @lab4.route('/lab4/logout', methods=['POST'])
 def logout():
     session.pop('login', None)
+    session.pop('name', None)
     return redirect('/lab4/login')
