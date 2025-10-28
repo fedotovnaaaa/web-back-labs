@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 4{% endblock %}
+
+{% block main %}
+    <h1>Редактирование данных</h1>
+    
+    <form method="post">
+        <div>
+            <label for="login">Логин:</label>
+            <input type="text" id="login" name="login" value="{{ user.login }}" required>
+        </div>
+        
+        <div>
+            <label for="password">Новый пароль (оставьте пустым, если не хотите менять):</label>
+            <input type="password" id="password" name="password">
+        </div>
+        
+        <div>
+            <label for="password_confirm">Подтверждение нового пароля:</label>
+            <input type="password" id="password_confirm" name="password_confirm">
+        </div>
+        
+        <div>
+            <label for="name">Имя:</label>
+            <input type="text" id="name" name="name" value="{{ user.name }}" required>
+        </div>
+        
+        <div>
+            <label for="gender">Пол:</label>
+            <select id="gender" name="gender">
+                <option value="мужской" {% if user.gender == 'мужской' %}selected{% endif %}>Мужской</option>
+                <option value="женский" {% if user.gender == 'женский' %}selected{% endif %}>Женский</option>
+            </select>
+        </div>
+        
+        {% if errors %}
+            <div style="color: red; margin: 10px 0;">
+                {% for error in errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <div>
+            <button type="submit">Сохранить</button>
+            <a href="/lab4/users">Отмена</a>
+        </div>
+    </form>
+{% endblock %}
