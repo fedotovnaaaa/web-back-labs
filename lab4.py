@@ -140,22 +140,24 @@ users = [
 
 def get_current_user():
     """Получить текущего пользователя из сессии"""
-    if 'login' in session:
-        for user in users:
+    if 'login' in session:    # Проверяет, есть ли логин в сессии
+        for user in users:     # Ищет пользователя в массиве по логину из сессии
             if user['login'] == session['login']:
-                return user
+                return user    # Возвращает найденного пользователя или None
     return None
+
 
 def is_login_unique(login, exclude_login=None):
     """Проверить, уникален ли логин"""
     for user in users:
-        if user['login'] == login and user['login'] != exclude_login:
-            return False
+        if user['login'] == login and user['login'] != exclude_login:    # Проверяет, существует ли уже пользователь с таким логином
+            return False    # exclude_login - позволяет исключить текущего пользователя при редактировании
     return True
 
 
 @lab4.route('/lab4/login', methods=['GET', 'POST'])
 def login():
+    # Проверяет, авторизован ли пользователь (есть ли логин в сессии)
     if request.method == 'GET':
         if 'login' in session:
             authorized = True
@@ -172,10 +174,11 @@ def login():
             login = ''
             return render_template('lab4/login.html', authorized=authorized, login=login)
     
+    # Получает данные из формы: логин и пароль
     login = request.form.get('login')
     password = request.form.get('password')
     
-    # Проверка на пустые значения
+    # Проверка на пустые значения, собирает ошибки в массив
     errors = []
     if not login:
         errors.append('не введён логин')
@@ -186,7 +189,7 @@ def login():
     if errors:
         return render_template('lab4/login.html', errors=errors, login_value=login, authorized=False)
     
-    # Проверка логина и пароля
+    # Ищет пользователя с совпадающими логином и паролем, если находит - сохраняет в сессию и перенаправляет
     for user in users:
         if login == user['login'] and password == user['password']:
             session['login'] = login
@@ -200,6 +203,7 @@ def login():
 
 @lab4.route('/lab4/logout', methods=['POST'])
 def logout():
+    # Удаляет данные пользователя из сессии
     session.pop('login', None)
     session.pop('name', None)
     return redirect('/lab4/login')
@@ -207,7 +211,7 @@ def logout():
 
 @lab4.route('/lab4/fridge', methods=['GET', 'POST'])
 def fridge():
-    temperature = request.form.get('temperature')
+    temperature = request.form.get('temperature')    # Получает температуру из формы
     message = ''
     snowflakes = 0
     error = ''
@@ -217,7 +221,7 @@ def fridge():
             error = 'Ошибка: не задана температура'
         else:
             try:
-                temp = float(temperature)
+                temp = float(temperature)    # Преобразует строку в число, обрабатывает ошибки, проверяет допустимые диапазоны температур
                 if temp < -12:
                     error = 'Не удалось установить температуру — слишком низкое значение'
                 elif temp > -1:
@@ -275,7 +279,7 @@ def grain_order():
             error = 'Ошибка: не указан вес заказа'
         else:
             try:
-                weight_float = float(weight)
+                weight_float = float(weight)    # Преобразует вес в число для расчетов
                 
                 # Проверка на отрицательный или нулевой вес
                 if weight_float <= 0:
@@ -319,7 +323,6 @@ def grain_order():
                          grain_names=grain_names)
 
 
-
 @lab4.route('/lab4/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
@@ -361,16 +364,17 @@ def register():
         'name': name,
         'gender': gender
     }
-    users.append(new_user)
+    users.append(new_user)    # Создание нового пользователя и добавление в массив
     
     return redirect('/lab4/login')
 
 
 @lab4.route('/lab4/users')
 def users_list():
-    if 'login' not in session:
+    if 'login' not in session:    # Только для авторизованных
         return redirect('/lab4/login')
     
+    # current_user - для идентификации текущего пользователя
     return render_template('lab4/users.html', users=users, current_user=session['login'])
 
 
@@ -381,7 +385,7 @@ def delete_user():
     
     login = session['login']
     
-    # Удаляем пользователя из массива
+    # Удаляем пользователя из массива, cоздает новый массив без удаляемого пользователя
     global users
     users = [user for user in users if user['login'] != login]
     
@@ -424,7 +428,7 @@ def edit_user():
         errors.append('Не введено имя')
     
     # Проверка на уникальность логина (если изменили)
-    if new_login != current_login:
+    if new_login != current_login:    # Проверка уникальности только если логин изменился
         for user in users:
             if user['login'] == new_login:
                 errors.append('Пользователь с таким логином уже существует')
