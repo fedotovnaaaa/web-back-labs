@@ -57,6 +57,40 @@ def api():
                     'id': id
                 }
     
+    if data['method'] == 'cancellation':
+        office_number = data['params']
+        for office in offices:
+            if office['number'] == office_number:
+                # Проверка: офис арендован
+                if office['tenant'] == '':
+                    return {
+                        'jsonrpc': '2.0',
+                        'error': {
+                            'code': 3,
+                            'message': 'Office is not rented'
+                        },
+                        'id': id
+                    }
+    
+                # Проверка: офис арендован именно тем пользователем, что сейчас авторизован
+                if office['tenant'] != login:
+                    return {
+                        'jsonrpc': '2.0',
+                        'error': {
+                            'code': 4,
+                            'message': 'Cannot cancel someone else\'s rental'
+                        },
+                        'id': id
+                    }
+                
+                # Снимаем аренду
+                office['tenant'] = ''
+                return {
+                    'jsonrpc': '2.0',
+                    'result': 'success',
+                    'id': id
+                }
+                
     return {
         'jsonrpc': '2.0',
         'error': {
