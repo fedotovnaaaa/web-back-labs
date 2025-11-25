@@ -4,6 +4,7 @@
 
 {% block script %}
 <script>
+// Получение списка офисов
 function getOfficeList() {
     const url = '/lab6/json-rpc-api/';
     const json = {
@@ -20,7 +21,7 @@ function getOfficeList() {
         return response.json()
     })
     .then(function(data) {
-        const office_list = data.result;
+        const office_list = data.result;  // Получаем массив офисов из ответа
         const ul = document.getElementById('office-list');
         ul.innerHTML = ''; // Очищаем список перед обновлением
         
@@ -34,11 +35,11 @@ function getOfficeList() {
             // Определяем статус офиса
             const isRented = office.tenant !== '';
             
-            if (isRented) {
+            if (isRented) { //проверяет, арендован ли офис
                 // Проверяем, авторизован ли пользователь и является ли офис его
                 const isMyOffice = office.tenant === '{{ session.get("login", "") }}';
                 
-                if (isMyOffice) {
+                if (isMyOffice) {  // проверяет, арендован ли офис текущим пользователем
                     li.innerText = `Офис ${office.number}: Арендован вами - ${office.price} руб.`;
                     li.style.background = '#e8f5e8'; // Зеленоватый фон для своих арендованных офисов
                     hasRentedOffices = true;
@@ -55,7 +56,7 @@ function getOfficeList() {
                     li.style.background = '#fff3cd'; // Желтоватый фон для чужих арендованных офисов
                     // Для чужих офисов кнопок не показываем
                 }
-            } else {
+            } else {  // Свободный офис
                 li.innerText = `Офис ${office.number}: Свободен - ${office.price} руб.`;
                 li.style.background = '#f8f9fa'; // Светлый фон для свободных офисов
                 
@@ -77,17 +78,18 @@ function getOfficeList() {
     });
 }
 
+// Отображение блока с обзей стоимостью
 function updateTotalCost(totalCost, hasRentedOffices) {
     let totalCostElement = document.getElementById('total-cost');
     let totalCostContainer = document.getElementById('total-cost-container');
     
-    if (hasRentedOffices) {
-        if (!totalCostContainer) {
+    if (hasRentedOffices) {  // Если есть арендованные офисы
+        if (!totalCostContainer) {  // Если нет, то создает
             totalCostContainer = document.createElement('div');
             totalCostContainer.id = 'total-cost-container';
             totalCostContainer.innerHTML = `<h2>Общая стоимость ваших арендованных офисов: <span id="total-cost">${totalCost}</span> руб.</h2>`;
             document.querySelector('main').appendChild(totalCostContainer);
-        } else {
+        } else { // Если есть, то обновляем
             totalCostElement.textContent = totalCost;
         }
     } else {
@@ -98,6 +100,7 @@ function updateTotalCost(totalCost, hasRentedOffices) {
     }
 }
 
+// Функция бронирования офиса
 function booking(officeNumber) {
     const url = '/lab6/json-rpc-api/';
     const json = {
@@ -130,12 +133,13 @@ function booking(officeNumber) {
         }
         else {
             document.getElementById('office-list').innerHTML = '';
-            getOfficeList();            
+            getOfficeList();  // Обновляем список после успешного бронирования    
         }
 
     });
 }
 
+// Функция освобождения офиса (аналогично booking)
 function cancellation(officeNumber) {
     const url = '/lab6/json-rpc-api/';
     const json = {
