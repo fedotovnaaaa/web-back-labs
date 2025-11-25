@@ -24,29 +24,78 @@ function getOfficeList() {
         const ul = document.getElementById('office-list');
         ul.innerHTML = ''; // Очищаем список перед обновлением
         
+        let totalCost = 0;
+        let hasRentedOffices = false;
+        
         for(let i = 0; i < office_list.length; i++) {
             const office = office_list[i];
             const li = document.createElement('li');
-            li.innerText = `${office.number}: ${office.tenant || 'Свободен'}`;
-
-            // Если офис свободен - показываем кнопку "Забронировать"
-            if (!office.tenant) {
+            
+            // Определяем статус офиса
+            const isRented = office.tenant !== '';
+            
+            if (isRented) {
+                // Проверяем, авторизован ли пользователь и является ли офис его
+                const isMyOffice = office.tenant === '{{ session.get("login", "") }}';
+                
+                if (isMyOffice) {
+                    li.innerText = `Офис ${office.number}: Арендован вами - ${office.price} руб.`;
+                    li.style.background = '#e8f5e8'; // Зеленоватый фон для своих арендованных офисов
+                    hasRentedOffices = true;
+                    totalCost += office.price;
+                    
+                    // Кнопка "Освободить" для своих офисов
+                    const cancellationButton = document.createElement('button');
+                    cancellationButton.innerText = 'Освободить';
+                    cancellationButton.style.background = '#dc3545'; // Красный цвет
+                    cancellationButton.onclick = function() {cancellation(office.number)};
+                    li.appendChild(cancellationButton);
+                } else {
+                    li.innerText = `Офис ${office.number}: Арендован - ${office.price} руб.`;
+                    li.style.background = '#fff3cd'; // Желтоватый фон для чужих арендованных офисов
+                    // Для чужих офисов кнопок не показываем
+                }
+            } else {
+                li.innerText = `Офис ${office.number}: Свободен - ${office.price} руб.`;
+                li.style.background = '#f8f9fa'; // Светлый фон для свободных офисов
+                
+                // Кнопка "Забронировать" для свободных офисов
                 const bookingButton = document.createElement('button');
                 bookingButton.innerText = 'Забронировать';
+                bookingButton.style.background = '#28a745'; // Зеленый цвет
                 bookingButton.onclick = function() {booking(office.number)};
                 li.appendChild(bookingButton);
-            } 
-            // Если офис занят - показываем кнопку "Освободить"
-            else {
-                const cancellationButton = document.createElement('button');
-                cancellationButton.innerText = 'Освободить';
-                cancellationButton.onclick = function() {cancellation(office.number)};
-                li.appendChild(cancellationButton);
             }
 
             ul.appendChild(li);
         }
+        
+        // Обновляем общую стоимость аренды (только для авторизованных пользователей)
+        {% if session.get('login') %}
+        updateTotalCost(totalCost, hasRentedOffices);
+        {% endif %}
     });
+}
+
+function updateTotalCost(totalCost, hasRentedOffices) {
+    let totalCostElement = document.getElementById('total-cost');
+    let totalCostContainer = document.getElementById('total-cost-container');
+    
+    if (hasRentedOffices) {
+        if (!totalCostContainer) {
+            totalCostContainer = document.createElement('div');
+            totalCostContainer.id = 'total-cost-container';
+            totalCostContainer.innerHTML = `<h2>Общая стоимость ваших арендованных офисов: <span id="total-cost">${totalCost}</span> руб.</h2>`;
+            document.querySelector('main').appendChild(totalCostContainer);
+        } else {
+            totalCostElement.textContent = totalCost;
+        }
+    } else {
+        // Убираем блок с общей стоимостью, если нет арендованных офисов
+        if (totalCostContainer) {
+            totalCostContainer.remove();
+        }
+    }
 }
 
 function booking(officeNumber) {
@@ -75,7 +124,7 @@ function booking(officeNumber) {
                     alert('Офис уже арендуется');
                     break;
                 case -32601:
-                    alert('Странныя ошибка');
+                    alert('Странная ошибка');
                     break;
             }
         }
@@ -131,6 +180,93 @@ document.addEventListener('DOMContentLoaded', function() {
     getOfficeList();
 });
 </script>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #c2cfef 0%, #d1b4ef 100%);
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    main {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+        text-align: center;
+        color: #29527b;
+        margin-bottom: 30px;
+        font-size: 32px;
+        font-weight: 300;
+    }
+
+    h2 {
+        text-align: center;
+        color: #5b27ae;
+        background: #f8fff9;
+        padding: 20px;
+        border-radius: 10px;
+        border: 2px solid #5b27ae;
+        margin-top: 30px;
+        font-size: 20px;
+    }
+
+    #office-list {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 20px;
+    }
+
+    #office-list li {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 0;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    #office-list li:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border-color: #667eea;
+    }
+
+    #office-list li button {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: auto;
+        width: 100%;
+        max-width: 200px;
+        color: white;
+    }
+
+    #office-list li button:hover {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+
+    #total-cost {
+        font-weight: bold;
+        color: #28a745;
+        font-size: 24px;
+    }
+</style>
 {% endblock %}
 
 {% block main %}
