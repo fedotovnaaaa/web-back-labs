@@ -2,9 +2,11 @@ from flask import Blueprint, render_template, request, abort
 
 lab7 = Blueprint('lab7', __name__)
 
+
 @lab7.route('/lab7/')
 def lab():
     return render_template('lab7/lab7.html')
+
 
 films = [
     {
@@ -39,6 +41,7 @@ films = [
     },
 ]
 
+
 @lab7.route('/lab7/rest-api/films/', methods=['GET'])
 def get_films():
     return films
@@ -49,3 +52,12 @@ def get_film(id):
         abort(404, description="Фильм с указанным ID не найден")
 
     return films[id]
+
+
+@lab7.route('/lab7/rest-api/films/<int:id>', methods=['DELETE'])
+def del_film(id):
+    if id < 0 or id >= len(films):
+        abort(404, description="Фильм с указанным ID не найден")
+        
+    del films[id]
+    return '', 204
