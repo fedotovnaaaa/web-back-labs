@@ -5,9 +5,23 @@
 {% block script %}
 <script src="{{ url_for('static', filename='lab7/main.js') }}"></script>
 <style>
-footer {
-    margin-top: 30px;
+body {
+    padding-bottom: 60px; 
+}
+
+div > button:first-of-type {
+    margin-bottom: 30px;
     position: relative;
+    z-index: 2;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 15px 0;
+    text-align: center;
+    z-index: 1;
 }
 
 .error-message {
