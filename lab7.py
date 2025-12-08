@@ -1,6 +1,30 @@
+from datetime import datetime
 from flask import Blueprint, render_template, request, abort, jsonify
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 lab7 = Blueprint('lab7', __name__)
+
+
+def get_db_connection():
+    return psycopg2.connect(
+        host='127.0.0.1',
+        database='julia_fedotova_knowledge_base',
+        user='julia_fedotova_knowledge_base',
+        password='1234567890'
+    )
+
+
+def db_connect():
+    conn = get_db_connection()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    return conn, cur
+
+
+def db_close(conn, cur):
+    conn.commit()
+    cur.close()
+    conn.close()
 
 
 @lab7.route('/lab7/')
@@ -8,77 +32,166 @@ def lab():
     return render_template('lab7/index.html')
 
 
-films = [
-    {
-        "title": "Miraculous World: Paris",
-        "title_ru": "Леди Баг и Супер Кот аз Альтернативной Вселенной. Приключения в Париже.",
-        "year": 2023,
-        "description": "В Париже появляются владельцы талисманов из другого мира. Они из параллельной вселенной, где всё наоборот: владельцы талисманов Божьей Коровки и Чёрного Кота, Токси Баг и Супер-Коготь — злодеи, а владелец талисмана Мотылька — Эсперий — супергерой. Леди Баг и Супер-Кот должны помочь Эсперию отразить атаку своих злодеев-двойников и не дать завладеть Камнем Чудес Бабочки."
-    },
-    {
-        "title": "Kızılcık Şerbeti",
-        "title_ru": "Клюквенный щербет",
-        "year": 2022,
-        "description": "Доа и Фатих влюблены и мечтают пожениться. Для них незапланированная беременность девушки — лишь повод ускорить свадьбу. Но на пути у искренних чувств пары встает родня. Мама невесты руководит школой и придерживается весьма прогрессивных взглядов. Родители жениха — консервативные люди, для которых традиции — все. Влюбленной паре придется побороться за свое будущее и постараться примирить находящиеся на разных полюсах семьи."
-    },    
-    {
-        "title": "Game of Thrones",
-        "title_ru": "Игра Престолов",
-        "year": 2011,
-        "description": "К концу подходит время благоденствия, и лето, длившееся почти десятилетие, угасает. Вокруг средоточия власти Семи королевств, Железного трона, зреет заговор, и в это непростое время король решает искать поддержки у друга юности Эддарда Старка. В мире, где все — от короля до наемника — рвутся к власти, плетут интриги и готовы вонзить нож в спину, есть место и благородству, состраданию и любви. Между тем никто не замечает пробуждение тьмы из легенд далеко на Севере — и лишь Стена защищает живых к югу от нее."
-    },
-    {
-        "title": "Stranger Things",
-        "title_ru": "Очень Странные Дела",
-        "year": 2016,
-        "description": "1980-е годы, тихий провинциальный американский городок. Благоприятное течение местной жизни нарушает загадочное исчезновение подростка по имени Уилл. Выяснить обстоятельства дела полны решимости родные мальчика и местный шериф, также события затрагивают лучшего друга Уилла – Майка. Он начинает собственное расследование. Майк уверен, что близок к разгадке, и теперь ему предстоит оказаться в эпицентре ожесточенной битвы потусторонних сил."
-    },    
-    {
-        "title": "The Witcher",
-        "title_ru": "Ведьмак",
-        "year": 2019,
-        "description": "Ведьмак Геральт, мутант и убийца чудовищ, на своей верной лошади по кличке Плотва путешествует по Континенту. За тугой мешочек чеканных монет этот мужчина избавит вас от всякой настырной нечисти — хоть от чудищ болотных, оборотней и даже заколдованных принцесс. В сельской глуши местную девушку Йеннифэр, которой сильно не повезло с внешностью, зато посчастливилось иметь способности к магии, отец продаёт колдунье в ученицы. А малолетняя наследница королевства Цинтра по имени Цири вынуждена пуститься в бега, когда их страну захватывает империя Нильфгаард. Судьбы этих троих окажутся тесно связаны, но скоро сказка сказывается, да не скоро дело делается."
-    },
-]
-
-
 @lab7.route('/lab7/rest-api/films/', methods=['GET'])
 def get_films():
+    conn, cur = db_connect()
+    cur.execute("SELECT * FROM films ORDER BY id")
+    films = cur.fetchall()
+    db_close(conn, cur)
     return jsonify(films)
+
 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['GET'])
 def get_film(id):
-    if id < 0 or id >= len(films):
+    conn, cur = db_connect()
+    cur.execute("SELECT * FROM films WHERE id = %s", (id,))
+    film = cur.fetchone()
+    db_close(conn, cur)
+    
+    if not film:
         abort(404, description="Фильм с указанным ID не найден")
-
-    return films[id]
+    
+    return jsonify(film)
 
 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['DELETE'])
 def del_film(id):
-    if id < 0 or id >= len(films):
+    conn, cur = db_connect()
+    
+    # Проверяем существование фильма
+    cur.execute("SELECT * FROM films WHERE id = %s", (id,))
+    film = cur.fetchone()
+    
+    if not film:
+        db_close(conn, cur)
         abort(404, description="Фильм с указанным ID не найден")
-
-    del films[id]
+    
+    # Удаляем фильм
+    cur.execute("DELETE FROM films WHERE id = %s", (id,))
+    db_close(conn, cur)
+    
     return '', 204
 
 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['PUT'])
 def put_film(id):
-    if id < 0 or id >= len(films):
+    conn, cur = db_connect()
+    
+    # Проверяем существование фильма
+    cur.execute("SELECT * FROM films WHERE id = %s", (id,))
+    if not cur.fetchone():
+        db_close(conn, cur)
         abort(404, description="Фильм с указанным ID не найден")
     
     film = request.get_json()
-    if film['description'] == '':
-        return {'description': 'Заполните описание'}, 400
-    films[id] = film 
-    return films[id]
+    
+    # Проверка всех полей
+    errors = {}
+    
+    # Проверка русского названия
+    if not film.get('title_ru') or film['title_ru'].strip() == '':
+        errors['title_ru'] = 'Заполните русское название'
+    
+    # Проверка оригинального названия
+    if not film.get('title') or film['title'].strip() == '':
+        if not film.get('title_ru') or film['title_ru'].strip() == '':
+            errors['title'] = 'Заполните название на оригинальном языке'
+        else:
+            # Если русское название есть, а оригинального нет - используем русское
+            film['title'] = film['title_ru']
+    
+    # Проверка года
+    if not film.get('year'):
+        errors['year'] = 'Заполните год выпуска'
+    else:
+        try:
+            year = int(film['year'])
+            current_year = datetime.now().year
+            if year < 1895 or year > current_year:
+                errors['year'] = f'Год должен быть от 1895 до {current_year}'
+        except (ValueError, TypeError):
+            errors['year'] = 'Год должен быть числом'
+    
+    # Проверка описания
+    if not film.get('description') or film['description'].strip() == '':
+        errors['description'] = 'Заполните описание'
+    else:
+        desc = film['description'].strip()
+        if len(desc) > 2000:
+            errors['description'] = 'Описание не должно превышать 2000 символов'
+    
+    if errors:
+        db_close(conn, cur)
+        return jsonify(errors), 400
+    
+    # Обновляем фильм в БД
+    cur.execute("""
+        UPDATE films 
+        SET title = %s, title_ru = %s, year = %s, description = %s 
+        WHERE id = %s
+    """, (film['title'], film['title_ru'], film['year'], film['description'], id))
+    
+    # Получаем обновленный фильм
+    cur.execute("SELECT * FROM films WHERE id = %s", (id,))
+    updated_film = cur.fetchone()
+    
+    db_close(conn, cur)
+    return jsonify(updated_film)
 
 
 @lab7.route('/lab7/rest-api/films/', methods=['POST'])
 def add_film():
     film = request.get_json()
-    if film['description'] == '':
-        return {'description': 'Заполните описание'}, 400
-    films.append(film)
-    return {"id": len(films) - 1}, 201
+
+    # Проверка всех полей
+    errors = {}
+    
+    # Проверка русского названия
+    if not film.get('title_ru') or film['title_ru'].strip() == '':
+        errors['title_ru'] = 'Заполните русское название'
+    
+    # Проверка оригинального названия
+    if not film.get('title') or film['title'].strip() == '':
+        if not film.get('title_ru') or film['title_ru'].strip() == '':
+            errors['title'] = 'Заполните название на оригинальном языке'
+        else:
+            # Если русское название есть, а оригинального нет - используем русское
+            film['title'] = film['title_ru']
+    
+    # Проверка года
+    if not film.get('year'):
+        errors['year'] = 'Заполните год выпуска'
+    else:
+        try:
+            year = int(film['year'])
+            current_year = datetime.now().year
+            if year < 1895 or year > current_year:
+                errors['year'] = f'Год должен быть от 1895 до {current_year}'
+        except (ValueError, TypeError):
+            errors['year'] = 'Год должен быть числом'
+    
+    # Проверка описания
+    if not film.get('description') or film['description'].strip() == '':
+        errors['description'] = 'Заполните описание'
+    else:
+        desc = film['description'].strip()
+        if len(desc) > 2000:
+            errors['description'] = 'Описание не должно превышать 2000 символов'
+    
+    if errors:
+        return jsonify(errors), 400
+    
+    conn, cur = db_connect()
+    
+    # Вставляем новый фильм
+    cur.execute("""
+        INSERT INTO films (title, title_ru, year, description) 
+        VALUES (%s, %s, %s, %s) 
+        RETURNING id
+    """, (film['title'], film['title_ru'], film['year'], film['description']))
+    
+    # Получаем ID нового фильма
+    new_id = cur.fetchone()['id']
+    
+    db_close(conn, cur)
+    return jsonify({"id": new_id}), 201

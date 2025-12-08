@@ -6,7 +6,16 @@ function fillFilmList() {
     .then(function (films) {
         let tbody = document.getElementById('film-list');
         tbody.innerHTML = '';
-        for(let i = 0; i<films.length; i++) {
+
+        // Обновляем заголовки таблицы
+        document.querySelector('thead tr').innerHTML = `
+            <th>Название на русском</th>
+            <th>Оригинальное название</th>
+            <th>Год</th>
+            <th>Действие</th>
+        `;
+
+        for(let i = 0; i < films.length; i++) {
             let tr = document.createElement('tr');
 
             let tdTitle = document.createElement('td');
@@ -14,27 +23,35 @@ function fillFilmList() {
             let tdYear = document.createElement('td');
             let tdActions = document.createElement('td');
 
-            tdTitle.innerText = films[i].title == films[i].title_ru ? '': films[i].title;
+            // Русское название - обычным шрифтом
             tdTitleRus.innerText = films[i].title_ru;
+            
+            // Оригинальное название - курсивом в скобках, если оно отличается от русского
+            if (films[i].title && films[i].title !== films[i].title_ru) {
+                tdTitle.innerHTML = `<em>(${films[i].title})</em>`;
+            } else {
+                tdTitle.innerHTML = `<em style="color: #888;">(${films[i].title_ru})</em>`;
+            }
+            
             tdYear.innerText = films[i].year;
 
             let editButton = document.createElement('button');
             editButton.innerText = 'Редактировать';
             editButton.onclick = function() {
-                editFilm(i);
+                editFilm(films[i].id); // Используем ID из БД
             };
 
             let delButton = document.createElement('button');
             delButton.innerText = 'Удалить';
             delButton.onclick = function() {
-                deleteFilm(i, films[i].title_ru);
+                deleteFilm(films[i].id, films[i].title_ru);
             };
 
             tdActions.append(editButton);
             tdActions.append(delButton);
 
-            tr.append(tdTitle);
             tr.append(tdTitleRus);
+            tr.append(tdTitle);
             tr.append(tdYear);
             tr.append(tdActions);
 
@@ -70,20 +87,75 @@ function cancel() {
 }
 
 
-// Очистка параметров
 function addFilm() {
     document.getElementById('id').value = '';
     document.getElementById('title').value = '';
     document.getElementById('title-ru').value = '';
     document.getElementById('year').value = '';
     document.getElementById('description').value = '';
-        // Очищаем сообщение об ошибке
-    document.getElementById('description-error').innerText = '';
+    
+    // Очищаем все сообщения об ошибках
+    document.querySelectorAll('.error-message').forEach(el => el.innerText = '');
+    
     showModal();
 }
 
 
+function validateFilm() {
+    // Очищаем все сообщения об ошибках
+    document.querySelectorAll('.error-message').forEach(el => el.innerText = '');
+    
+    const titleRu = document.getElementById('title-ru').value.trim();
+    const title = document.getElementById('title').value.trim();
+    const year = document.getElementById('year').value;
+    const description = document.getElementById('description').value.trim();
+    
+    let isValid = true;
+    
+    // Проверка русского названия
+    if (!titleRu) {
+        document.getElementById('title-ru-error').innerText = 'Заполните русское название';
+        isValid = false;
+    }
+    
+    // Проверка оригинального названия, если русское тоже пустое
+    if (!title && !titleRu) {
+        document.getElementById('title-error').innerText = 'Заполните название на оригинальном языке';
+        isValid = false;
+    }
+    
+    // Проверка года
+    if (!year) {
+        document.getElementById('year-error').innerText = 'Заполните год выпуска';
+        isValid = false;
+    } else {
+        const currentYear = new Date().getFullYear();
+        const yearNum = parseInt(year);
+        if (isNaN(yearNum) || yearNum < 1895 || yearNum > currentYear) {
+            document.getElementById('year-error').innerText = `Год должен быть числом от 1895 до ${currentYear}`;
+            isValid = false;
+        }
+    }
+    
+    // Проверка описания
+    if (!description) {
+        document.getElementById('description-error').innerText = 'Заполните описание';
+        isValid = false;
+    } else if (description.length > 2000) {
+        document.getElementById('description-error').innerText = 'Описание не должно превышать 2000 символов';
+        isValid = false;
+    }
+    
+    return isValid;
+}
+
+
 function sendFilm() {
+    // Сначала валидируем на клиенте
+    if (!validateFilm()) {
+        return; // Не отправляем, если есть ошибки
+    }
+    
     const id = document.getElementById('id').value;
     const film = {
         title: document.getElementById('title').value,
@@ -104,15 +176,18 @@ function sendFilm() {
         if(resp.ok) {
             fillFilmList();
             hideModal();
-            // Очищаем ошибку при успешной отправке
-            document.getElementById('description-error').innerText = '';
             return {};
         }
         return resp.json();
     })
     .then(function(errors) {
-        if(errors.description)
-            document.getElementById('description-error').innerText = errors.description;
+        // Отображаем ошибки для каждого поля
+        for(const field in errors) {
+            const errorElement = document.getElementById(`${field}-error`);
+            if(errorElement) {
+                errorElement.innerText = errors[field];
+            }
+        }
     });
 }
 
@@ -123,13 +198,15 @@ function editFilm(id) {
         return data.json();
     })
     .then(function (film) {
-        document.getElementById('id').value = id;
+        document.getElementById('id').value = film.id;
         document.getElementById('title').value = film.title;
         document.getElementById('title-ru').value = film.title_ru;
         document.getElementById('year').value = film.year;
         document.getElementById('description').value = film.description;
-        // Очищаем сообщение об ошибке при открытии формы редактирования
-        document.getElementById('description-error').innerText = '';
+        
+        // Очищаем все сообщения об ошибках
+        document.querySelectorAll('.error-message').forEach(el => el.innerText = '');
+        
         showModal();
     });
 }

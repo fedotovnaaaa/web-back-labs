@@ -5,20 +5,113 @@
 {% block script %}
 <script src="{{ url_for('static', filename='lab7/main.js') }}"></script>
 <style>
+.error-message {
+    color: rgb(172, 37, 107);
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px 15px;
+    text-align: left;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #333;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+button {
+    background-color: #06be7b;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #169264;
+}
+
+button:active {
+    background-color: #246f54;
+}
+
+button:nth-child(2) {
+    background-color: #058ed2;
+}
+
+button:nth-child(2):hover {
+    background-color: #10618a;
+}
 .modal {
     display: none;
     z-index: 100;
-    box-shadow: 3px 3px 5px palevioletred;
+    box-shadow: 0 4px 20px rgba(224, 39, 39, 0.15);
     background: white;
     width: 400px;
     left: 50%;
-    top: 220px;
+    top: 80px;
     margin-left: -200px;
-    position: absolute;
+    position: fixed;
     padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
 }
-.error-message {
-    color: red;
+
+.modal label {
+    display: block;
+    margin: 12px 0 6px 0;
+    font-weight: 500;
+    color: #333;
+}
+
+.modal input[type="text"],
+.modal input[type="number"],
+.modal textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.modal textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.modal button {
+    margin-top: 15px;
+    margin-right: 10px;
+}
+
+.modal button:nth-child(2) {
+    background-color: #6c757d;
+}
+
+.modal button:nth-child(2):hover {
+    background-color: #5a6268;
 }
 </style>
 {% endblock %}
@@ -51,17 +144,19 @@
         <label>
             Название фильма на русском: 
             <input type="text" id="title-ru">
+            <div id="title-ru-error" class="error-message"></div>
         </label><br>
 
         <label>
-            Название фильма на оригинальном языке
-            <i>(оставьте поле пустым, если русский):</i> 
-            <input type="text" id="title">
+            Название фильма на оригинальном языке:
+            <input type="text" id="title" placeholder="Оставьте пустым, если совпадает с русским">
+            <div id="title-error" class="error-message"></div>
         </label><br>
 
         <label>
             Год выпуска:
             <input type="number" id="year">
+            <div id="year-error" class="error-message"></div>
         </label><br>
 
         <label>
