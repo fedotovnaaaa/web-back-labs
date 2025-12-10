@@ -32,6 +32,7 @@ def lab():
     return render_template('lab7/index.html')
 
 
+# Получение всех фильмов
 @lab7.route('/lab7/rest-api/films/', methods=['GET'])
 def get_films():
     conn, cur = db_connect()
@@ -41,6 +42,7 @@ def get_films():
     return jsonify(films)
 
 
+# Получение одного фильма
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['GET'])
 def get_film(id):
     conn, cur = db_connect()
@@ -54,6 +56,7 @@ def get_film(id):
     return jsonify(film)
 
 
+# Удаление фильма
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['DELETE'])
 def del_film(id):
     conn, cur = db_connect()
@@ -73,6 +76,7 @@ def del_film(id):
     return '', 204
 
 
+# Обновление фильма
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['PUT'])
 def put_film(id):
     conn, cur = db_connect()
@@ -139,6 +143,7 @@ def put_film(id):
     return jsonify(updated_film)
 
 
+# Создание фильма
 @lab7.route('/lab7/rest-api/films/', methods=['POST'])
 def add_film():
     film = request.get_json()

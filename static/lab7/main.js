@@ -23,7 +23,7 @@ function fillFilmList() {
             let tdYear = document.createElement('td');
             let tdActions = document.createElement('td');
 
-            // Русское название - обычным шрифтом
+            // Русское название
             tdTitleRus.innerText = films[i].title_ru;
             
             // Оригинальное название - курсивом в скобках, если оно отличается от русского
@@ -88,6 +88,7 @@ function cancel() {
 
 
 function addFilm() {
+    // Очищаем все поля формы для создания нового фильма
     document.getElementById('id').value = '';
     document.getElementById('title').value = '';
     document.getElementById('title-ru').value = '';
@@ -105,6 +106,7 @@ function validateFilm() {
     // Очищаем все сообщения об ошибках
     document.querySelectorAll('.error-message').forEach(el => el.innerText = '');
     
+    // Получаем значения полей, применяя trim() для удаления пробелов по краям
     const titleRu = document.getElementById('title-ru').value.trim();
     const title = document.getElementById('title').value.trim();
     const year = document.getElementById('year').value;
@@ -164,6 +166,7 @@ function sendFilm() {
         description: document.getElementById('description').value
     }
 
+    // Если ID пустой - POST (создание), если ID есть - PUT (обновление)
     const url = `/lab7/rest-api/films/${id}`;
     const method = id === '' ? 'POST': 'PUT';
 
@@ -197,6 +200,7 @@ function editFilm(id) {
     .then(function (data) {
         return data.json();
     })
+    // Получает данные фильма по ID и заполняет ими форму
     .then(function (film) {
         document.getElementById('id').value = film.id;
         document.getElementById('title').value = film.title;

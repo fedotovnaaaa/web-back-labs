@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <style>
+        .user-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+    </style>
+    
+    <h1>База знаний</h1>
+
+    <div class="user-info">
+        <strong>Пользователь:</strong>
+        {% if login %}
+            {{ login }} | 
+            <a href="/lab5/profile" style="color: #007bff; text-decoration: none;">Профиль</a> | 
+            <a href="/lab5/logout" style="color: #dc3545; text-decoration: none;">Выйти</a>
+        {% else %}
+            anonymous
+        {% endif %}
+    </div>
+
+    <ol>
+        <li><a href="/lab8/login">Вход</a></li>
+        <li><a href="/lab8/register">Регистрация</a></li>
+        <li><a href="/lab8/">Список статей</a></li>
+        <li><a href="/lab8/create">Создать статью</a></li>
+    </ol>
+{% endblock %}
