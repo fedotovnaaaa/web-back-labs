@@ -118,7 +118,6 @@ def create_article():
         article_text=article_text,
         is_public=is_public,
         is_favorite=is_favorite,
-        likes=0
     )
     
     db.session.add(new_article)
