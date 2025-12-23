@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <h1>Публичные статьи</h1>
+    
+    {% if login %}
+        <p>Вы вошли как: <b>{{ login }}</b></p>
+    {% else %}
+        <p>Гость</p>
+    {% endif %}
+    
+    <div class="action-buttons">
+        <a href="/lab8/" class="btn btn-secondary">На главную</a>
+        {% if current_user.is_authenticated %}
+            <a href="/lab8/articles" class="btn btn-success">Мои статьи</a>
+        {% else %}
+            <a href="/lab8/login" class="btn btn-primary">Войти</a>
+        {% endif %}
+    </div>
+    
+    <div class="search-form">
+        <form action="/lab8/public_search" method="get">
+            <input type="text" name="q" placeholder="Поиск по публичным статьям...">
+            <button type="submit" class="btn-search">Найти</button>
+        </form>
+    </div>
+    
+    {% if articles %}
+        <div class="articles-list">
+            {% for article in articles %}
+                <div class="article-card">
+                    <h3>{{ article.title }}</h3>
+                    <p class="article-preview">
+                        {{ article.article_text[:200] }}{% if article.article_text|length > 200 %}...{% endif %}
+                    </p>
+                    <p class="article-meta">
+                        Лайков: {{ article.likes }}
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-articles">Нет публичных статей.</p>
+    {% endif %}
+
+    <style>
+        .action-buttons {
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-right: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-secondary {
+            background-color: #cadef0;
+        }
+        
+        .btn-success {
+            background-color: #9be6f1;
+        }
+        
+        .btn-primary {
+            background-color: #9be6f1;
+        }
+        
+        .search-form {
+            margin-bottom: 20px;
+        }
+        
+        .search-form form {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-form input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        .btn-search {
+            padding: 8px 15px;
+            background-color: #287784;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .articles-list {
+            margin-top: 20px;
+        }
+        
+        .article-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+        }
+        
+        .article-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .article-preview {
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+        
+        .article-meta {
+            color: #666;
+            font-size: 14px;
+            margin: 10px 0 0 0;
+        }
+        
+        .no-articles {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            text-align: center;
+            color: #6c757d;
+        }
+        
+        .btn:hover,
+        .btn-search:hover {
+            opacity: 0.9;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #b1c2d2;
+        }
+        
+        .btn-success:hover {
+            background-color: #74b8c4;
+        }
+        
+        .btn-primary:hover {
+            background-color: #74b8c4;
+        }
+        
+        .btn-search:hover {
+            background-color: #287784;
+        }
+        
+        .article-card:hover {
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+    </style>
+{% endblock %}

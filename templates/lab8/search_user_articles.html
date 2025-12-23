@@ -3,28 +3,29 @@
 {% block lab %}Лабораторная работа 8{% endblock %}
 
 {% block main %}
-    <h1>Мои статьи</h1>
+    <h1>Поиск по моим статьям</h1>
     
-    {% if login %}
-        <p>Пользователь: <b>{{ login }}</b></p>
-    {% endif %}
+    <p>Пользователь: <b>{{ login }}</b></p>
     
     <div class="action-buttons">
-        <a href="/lab8/create" class="but but-success">Создать новую статью</a>
-        <a href="/lab8/favorites" class="but but-warning">Избранные статьи</a>
-        <a href="/lab8/public_articles" class="but but-info">Публичные статьи</a>
+        <a href="/lab8/articles" class="but but-secondary">Назад к статьям</a>
+        <a href="/lab8/public_search" class="but but-info">Поиск по публичным</a>
     </div>
     
     <div class="search-form">
         <form action="/lab8/user_search" method="get">
-            <input type="text" name="q" placeholder="Поиск по моим статьям...">
+            <input type="text" name="q" value="{{ query }}" placeholder="Поиск по моим статьям...">
             <button type="submit" class="but-search">Найти</button>
         </form>
     </div>
     
-    {% if articles %}
+    {% if query %}
+        <h2 class="search-results-title">Результаты поиска для "{{ query }}"</h2>
+    {% endif %}
+    
+    {% if user_articles %}
         <div class="articles-list">
-            {% for article in articles %}
+            {% for article in user_articles %}
                 <div class="article-card">
                     <h3>
                         {% if article.is_public %}
@@ -37,6 +38,10 @@
                         {% endif %}
                     </h3>
                     
+                    <p class="article-preview">
+                        {{ article.article_text[:200] }}{% if article.article_text|length > 200 %}...{% endif %}
+                    </p>
+                    
                     <p class="article-meta">
                         Лайков: {{ article.likes }} | 
                         Статус: {% if article.is_public %}Публичная{% else %}Приватная{% endif %}
@@ -44,19 +49,12 @@
                     
                     <div class="article-actions">
                         <a href="/lab8/edit/{{ article.id }}" class="but-edit">Редактировать</a>
-                        
-                        <form action="/lab8/delete/{{ article.id }}" method="post" class="delete-form">
-                            <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить эту статью?')" 
-                                    class="but-delete">
-                                Удалить
-                            </button>
-                        </form>
                     </div>
                 </div>
             {% endfor %}
         </div>
-    {% else %}
-        <p class="no-articles">У вас еще нет статей. <a href="/lab8/create">Создайте первую статью</a></p>
+    {% elif query %}
+        <p class="no-results">По вашему запросу ничего не найдено.</p>
     {% endif %}
 
     <style>
@@ -75,16 +73,12 @@
             cursor: pointer;
         }
         
-        .but-success {
-            background-color: #6de387;
-        }
-        
-        .but-warning {
-            background-color: #ffc107;
+        .but-secondary {
+            background-color: #cadef0;
         }
         
         .but-info {
-            background-color: #a3dee7;
+            background-color: #9be6f1;
         }
         
         .search-form {
@@ -112,6 +106,12 @@
             cursor: pointer;
         }
         
+        .search-results-title {
+            margin: 20px 0;
+            color: #333;
+            font-size: 1.5em;
+        }
+        
         .articles-list {
             margin-top: 20px;
         }
@@ -121,11 +121,17 @@
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 4px;
+            background-color: #f8f9fa;
         }
         
         .article-card h3 {
             margin-top: 0;
             color: #333;
+        }
+        
+        .article-preview {
+            margin: 10px 0;
+            line-height: 1.5;
         }
         
         .article-meta {
@@ -136,74 +142,55 @@
         
         .article-actions {
             margin-top: 10px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
         }
         
         .but-edit {
             padding: 5px 10px;
-            background-color: #bbecf5;
+            background-color: #b4e0e6;
             color: white;
             text-decoration: none;
             border-radius: 4px;
         }
         
-        .delete-form {
-            display: inline;
-        }
-        
-        .but-delete {
-            padding: 5px 10px;
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        
-        .no-articles {
+        .no-results {
             margin-top: 20px;
             padding: 20px;
             background-color: #f8f9fa;
             border-radius: 4px;
             text-align: center;
-        }
-        
-        .no-articles a {
-            color: #287784;
-            text-decoration: none;
-        }
-        
-        .no-articles a:hover {
-            text-decoration: underline;
+            color: #6c757d;
         }
         
         .but:hover,
         .but-search:hover,
-        .but-edit:hover,
-        .but-delete:hover {
+        .but-edit:hover {
             opacity: 0.9;
         }
         
-        .but-success:hover {
-            background-color: #61c777;
-        }
-        
-        .but-warning:hover {
-            background-color: #e0a800;
+        .but-secondary:hover {
+            background-color: #aac0d2;
         }
         
         .but-info:hover {
-            background-color: #71aeb7;
+            background-color: #77b4bd;
+        }
+        
+        .but-search:hover {
+            background-color: #287784;
         }
         
         .but-edit:hover {
-            background-color: #75aab3;
+            background-color: #98dee8;
         }
         
-        .but-delete:hover {
-            background-color: #c82333;
+        .article-card:hover {
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .search-form input:focus {
+            border-color: #86b7fe;
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
         }
     </style>
 {% endblock %}

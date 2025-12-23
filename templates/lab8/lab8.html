@@ -11,25 +11,38 @@
             margin-bottom: 20px;
             border-left: 4px solid #007bff;
         }
+        
+        .logout-link {
+            color: #dc3545 !important;
+        }
     </style>
     
     <h1>База знаний</h1>
 
     <div class="user-info">
         <strong>Пользователь:</strong>
-        {% if login %}
-            {{ login }} | 
+        {% if current_user.is_authenticated %}
+            {{ current_user.login }} | 
             <a href="/lab5/profile" style="color: #007bff; text-decoration: none;">Профиль</a> | 
-            <a href="/lab5/logout" style="color: #dc3545; text-decoration: none;">Выйти</a>
+            <a href="/lab8/logout" class="logout-link" style="text-decoration: none;">Выйти</a>
         {% else %}
             anonymous
         {% endif %}
     </div>
 
     <ol>
-        <li><a href="/lab8/login">Вход</a></li>
-        <li><a href="/lab8/register">Регистрация</a></li>
-        <li><a href="/lab8/articles">Список статей</a></li>
-        <li><a href="/lab8/create">Создать статью</a></li>
+        {% if current_user.is_authenticated %}
+            <li><a href="/lab8/articles">Мои статьи</a></li>
+            <li><a href="/lab8/create">Создать статью</a></li>
+            <li><a href="/lab8/favorites">Избранное</a></li>
+            <li><a href="/lab8/public_articles">Публичные статьи</a></li>
+            <li><a href="/lab8/user_search?q=">Поиск по моим статьям</a></li>
+            <li><a href="/lab8/public_search?q=">Поиск по публичным статьям</a></li>
+        {% else %}
+            <li><a href="/lab8/login">Войти</a></li>
+            <li><a href="/lab8/register">Регистрация</a></li>
+            <li><a href="/lab8/public_articles">Публичные статьи</a></li>
+            <li><a href="/lab8/public_search?q=">Поиск по публичным статьям</a></li>
+        {% endif %}
     </ol>
 {% endblock %}

@@ -3,38 +3,20 @@
 {% block lab %}Лабораторная работа 8{% endblock %}
 
 {% block main %}
-    <h1>Мои статьи</h1>
+    <h1>Избранные статьи</h1>
     
-    {% if login %}
-        <p>Пользователь: <b>{{ login }}</b></p>
-    {% endif %}
+    <p>Пользователь: <b>{{ login }}</b></p>
     
     <div class="action-buttons">
-        <a href="/lab8/create" class="but but-success">Создать новую статью</a>
-        <a href="/lab8/favorites" class="but but-warning">Избранные статьи</a>
-        <a href="/lab8/public_articles" class="but but-info">Публичные статьи</a>
-    </div>
-    
-    <div class="search-form">
-        <form action="/lab8/user_search" method="get">
-            <input type="text" name="q" placeholder="Поиск по моим статьям...">
-            <button type="submit" class="but-search">Найти</button>
-        </form>
+        <a href="/lab8/articles" class="but but-secondary">Назад к статьям</a>
     </div>
     
     {% if articles %}
         <div class="articles-list">
             {% for article in articles %}
-                <div class="article-card">
+                <div class="article-card favorite-card">
                     <h3>
-                        {% if article.is_public %}
-                            {{ article.title }}
-                        {% else %}
-                            {{ article.title }}
-                        {% endif %}
-                        {% if article.is_favorite %}
-                            ☆
-                        {% endif %}
+                        {{ article.title }}
                     </h3>
                     
                     <p class="article-meta">
@@ -56,7 +38,7 @@
             {% endfor %}
         </div>
     {% else %}
-        <p class="no-articles">У вас еще нет статей. <a href="/lab8/create">Создайте первую статью</a></p>
+        <p class="no-articles">У вас нет избранных статей.</p>
     {% endif %}
 
     <style>
@@ -75,41 +57,13 @@
             cursor: pointer;
         }
         
+        .but-secondary {
+            background-color: #cadef0;
+            color: #333;
+        }
+        
         .but-success {
-            background-color: #6de387;
-        }
-        
-        .but-warning {
-            background-color: #ffc107;
-        }
-        
-        .but-info {
-            background-color: #a3dee7;
-        }
-        
-        .search-form {
-            margin-bottom: 20px;
-        }
-        
-        .search-form form {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .search-form input {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        
-        .but-search {
-            padding: 8px 15px;
-            background-color: #287784;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            background-color: #28a745;
         }
         
         .articles-list {
@@ -123,9 +77,19 @@
             border-radius: 4px;
         }
         
+        .favorite-card {
+            background-color: #fff2f9;
+            border-color: #ff0088;
+        }
+        
         .article-card h3 {
             margin-top: 0;
             color: #333;
+        }
+        
+        .article-preview {
+            margin: 10px 0;
+            line-height: 1.5;
         }
         
         .article-meta {
@@ -143,7 +107,7 @@
         
         .but-edit {
             padding: 5px 10px;
-            background-color: #bbecf5;
+            background-color: #97e4a3;
             color: white;
             text-decoration: none;
             border-radius: 4px;
@@ -155,7 +119,7 @@
         
         .but-delete {
             padding: 5px 10px;
-            background-color: #dc3545;
+            background-color: #ef5f6d;
             color: white;
             border: none;
             border-radius: 4px;
@@ -168,42 +132,33 @@
             background-color: #f8f9fa;
             border-radius: 4px;
             text-align: center;
-        }
-        
-        .no-articles a {
-            color: #287784;
-            text-decoration: none;
-        }
-        
-        .no-articles a:hover {
-            text-decoration: underline;
+            color: #6c757d;
         }
         
         .but:hover,
-        .but-search:hover,
         .but-edit:hover,
         .but-delete:hover {
             opacity: 0.9;
         }
         
+        .but-secondary:hover {
+            background-color: #cccaf0;
+        }
+        
         .but-success:hover {
-            background-color: #61c777;
-        }
-        
-        .but-warning:hover {
-            background-color: #e0a800;
-        }
-        
-        .but-info:hover {
-            background-color: #71aeb7;
+            background-color: #6dd584;
         }
         
         .but-edit:hover {
-            background-color: #75aab3;
+            background-color: #61c376;
         }
         
         .but-delete:hover {
-            background-color: #c82333;
+            background-color: #bd3e4b;
+        }
+        
+        .favorite-card:hover {
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
         }
     </style>
 {% endblock %}
