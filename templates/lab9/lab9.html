@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block lab %}лабораторная работа 9{% endblock %}
+
+{% block main %}
+<style>
+body {
+    background: linear-gradient(135deg, #eaf6ff, #fff0f6);
+    font-family: Arial, sans-serif;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #2d3436;
+    margin-bottom: 20px;
+}
+
+.stats {
+    background: white;
+    padding: 15px;
+    border-radius: 14px;
+    width: 320px;
+    margin: 0 auto 20px auto;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+#container {
+    position: relative;
+    height: 600px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+#container img {
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+#container img:hover {
+    transform: scale(1.1);
+}
+
+button {
+    background: #ff7675;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+button:hover {
+    background: #e84393;
+}
+
+#error {
+    text-align: center;
+    color: #d63031;
+    margin: 10px;
+}
+
+#modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+}
+
+#modal-content {
+    background: white;
+    width: 320px;
+    margin: 120px auto;
+    padding: 20px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+#modal-content img {
+    margin-top: 10px;
+    border-radius: 10px;
+}
+</style>
+
+<h1>НОВОГОДНИЕ ПОДАРКИ</h1>
+
+<div class="stats">
+    открыто подарков: <b><span id="opened-count">0</span></b> / 3<br>
+    осталось неоткрытых: <b><span id="remaining-count">10</span></b>
+</div>
+
+<div id="error"></div>
+
+<div style="text-align:center; margin-bottom:20px;">
+    <button id="santa-btn" style="display:none;" onclick="resetGifts()">
+        Дед мороз
+    </button>
+</div>
+
+<div id="container"></div>
+
+<div id="modal">
+    <div id="modal-content">
+        <p id="modal-text"></p>
+        <img id="modal-image" width="200">
+        <br><br>
+        <button onclick="closeModal()">закрыть</button>
+    </div>
+</div>
+
+<script>
+// закрытие модального окна
+function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+}
+
+// открытие подарка
+function openGift(id) {
+    fetch('/lab9/open_gift', {
+        method: 'post',
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify({gift_id: id})
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.error) {
+            document.getElementById('error').innerText = data.error;
+            return;
+        }
+
+        document.getElementById('opened-count').innerText = data.opened_count;
+        document.getElementById('remaining-count').innerText = data.remaining;
+
+        document.getElementById('modal-text').innerText = data.congratulation;
+        document.getElementById('modal-image').src = '/static/lab9/' + data.image;
+        document.getElementById('modal').style.display = 'block';
+
+        document.getElementById('gift-' + id).style.opacity = '0.4';
+    });
+}
+
+// сброс подарков
+function resetGifts() {
+    fetch('/lab9/reset_gifts', {method: 'post'})
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        }
+    });
+}
+
+// загрузка информации о подарках
+fetch('/lab9/get_gifts_info', {method: 'post'})
+.then(r => r.json())
+.then(data => {
+    document.getElementById('opened-count').innerText = data.opened_count;
+    document.getElementById('remaining-count').innerText = data.remaining;
+
+    if (data.authorized) {
+        document.getElementById('santa-btn').style.display = 'inline-block';
+    }
+
+    const container = document.getElementById('container');
+
+    for (let i = 1; i <= 15; i++) {
+        const img = document.createElement('img');
+        img.src = '/static/lab9/gift' + i + '.png';
+        img.id = 'gift-' + i;
+        img.width = 100;
+        img.style.position = 'absolute';
+        img.style.top = data.positions[i - 1].top;
+        img.style.left = data.positions[i - 1].left;
+
+        if (!data.opened_boxes.includes(i)) {
+            img.onclick = () => openGift(i);
+        } else {
+            img.style.opacity = '0.4';
+        }
+
+        container.appendChild(img);
+    }
+});
+</script>
+{% endblock %}
