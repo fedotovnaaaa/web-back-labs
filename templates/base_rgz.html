@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Банк Julka{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main_rgz.css') }}">
+</head>
+<body class="flex-body">
+    <header>
+        <div class="container header-content">
+            <h1>Банк Julka</h1>
+            <nav>
+                <a href="/" class="home-link">На главную</a>
+                <button id="logout-btn" class="logout-btn" style="display:none;">Выйти</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            © 2025 Федотова Юлия, ФБИ-31
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,100 @@
+{% extends "base_rgz.html" %}
+
+{% block title %}Банк Julka{% endblock %}
+
+{% block content %}
+<div class="user-info">
+    <h2>Добро пожаловать в Банк Julka{% if currentUser %}, {{ currentUser.full_name }}{% endif %}</h2>
+</div>
+
+<div id="login-form" class="form-card">
+    <h3>Вход</h3>
+    <input id="login" placeholder="Логин" required>
+    <input id="password" type="password" placeholder="Пароль" required>
+    <button id="login-btn">Войти</button>
+    <div id="login-error" class="error-message"></div>
+</div>
+
+<div id="client-panel" style="display:none;" class="panel-card">
+    <h3>Ваш счёт</h3>
+    <p>Номер: <strong id="account-number"></strong></p>
+    <p>Баланс: <strong id="balance"></strong></p>
+
+    <h3>Перевод</h3>
+    <input id="to-account" placeholder="Номер счёта / телефон получателя">
+    <input id="amount" type="number" placeholder="Сумма" min="1">
+    <button id="transfer-btn">Перевести</button>
+
+    <h3>История операций</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Контрагент</th>
+                <th>Тип</th>
+                <th>Сумма</th>
+                <th>Дата</th>
+            </tr>
+        </thead>
+        <tbody id="history"></tbody>
+    </table>
+</div>
+
+<div id="manager-panel" style="display:none;" class="panel-card">
+    <h3>Управление пользователями</h3>
+    
+    <div class="search-bar">
+        <input type="text" id="search-phone" placeholder="Поиск по номеру телефона (+7...)">
+        <div class="search-buttons">
+            <button onclick="searchUsers()">Найти</button>
+            <button onclick="loadUsers()">Сбросить</button>
+        </div>
+    </div>
+
+    <button id="add-user-btn">Добавить пользователя</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ФИО</th>
+                <th>Логин</th>
+                <th>Телефон</th>
+                <th>Роль</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody id="users-table"></tbody>
+    </table>
+</div>
+
+<button id="logout-btn" class="logout-btn" style="display:none;">Выйти</button>
+
+<div class="modal" id="user-modal" style="display:none;">
+    <div class="modal-content">
+        <h3>Добавить / Редактировать пользователя</h3>
+        <input type="hidden" id="user-id">
+        <label>ФИО</label>
+        <input id="full-name" placeholder="ФИО">
+        <label>Логин</label>
+        <input id="user-login" placeholder="Логин">
+        <label>Пароль</label>
+        <input id="user-password" type="password" placeholder="Пароль">
+        <label>Телефон</label>
+        <input id="phone" placeholder="Телефон (+7...)">
+        <label>Роль</label>
+        <select id="role">
+            <option value="client">Клиент</option>
+            <option value="manager">Менеджер</option>
+        </select>
+        <label>Номер счёта (для клиента)</label>
+        <input id="account-number-modal" placeholder="20 цифр">
+        <label>Баланс (для клиента)</label>
+        <input id="balance-modal" type="number" placeholder="Баланс">
+        <div class="modal-buttons">
+            <button id="save-user-btn">Сохранить</button>
+            <button id="cancel-user-btn">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='rgz/main.js') }}"></script>
+{% endblock %}
